@@ -44,7 +44,8 @@ Drivers/STM32L0xx_HAL_Driver/Src/stm32l0xx_ll_exti.c \
 Drivers/STM32L0xx_HAL_Driver/Src/stm32l0xx_ll_gpio.c \
 Drivers/STM32L0xx_HAL_Driver/Src/stm32l0xx_ll_rcc.c \
 Drivers/STM32L0xx_HAL_Driver/Src/stm32l0xx_ll_utils.c \
-Drivers/STM32L0xx_HAL_Driver/Src/stm32l0xx_ll_usart.c
+Drivers/STM32L0xx_HAL_Driver/Src/stm32l0xx_ll_usart.c \
+Core/Src/log.c
 
 # ASM sources
 ASM_SOURCES =  \

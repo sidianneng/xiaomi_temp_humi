@@ -19,6 +19,7 @@
 /* USER CODE END Header */
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
+#include "log.h"
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
@@ -48,7 +49,7 @@
 /* Private function prototypes -----------------------------------------------*/
 void SystemClock_Config(void);
 static void MX_GPIO_Init(void);
-static void MX_USART2_UART_Init(void);
+extern void MX_USART2_UART_Init(void);
 /* USER CODE BEGIN PFP */
 
 /* USER CODE END PFP */
@@ -92,7 +93,8 @@ int main(void)
   MX_GPIO_Init();
   MX_USART2_UART_Init();
   /* USER CODE BEGIN 2 */
-
+  Log_Init();
+  Log_Printf("xiaomi temp humi start\n");
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -102,7 +104,6 @@ int main(void)
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
-	LL_USART_TransmitData8(USART2, 0x32);
 	LL_mDelay(500);
 	LL_GPIO_WriteOutputPort(GPIOB, LL_GPIO_PIN_1);
 	LL_mDelay(500);
@@ -152,7 +153,7 @@ void SystemClock_Config(void)
   * @param None
   * @retval None
   */
-static void MX_USART2_UART_Init(void)
+void MX_USART2_UART_Init(void)
 {
 
   /* USER CODE BEGIN USART2_Init 0 */
