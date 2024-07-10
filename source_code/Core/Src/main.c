@@ -104,10 +104,10 @@ int main(void)
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
-	LL_mDelay(500);
-	LL_GPIO_WriteOutputPort(GPIOB, LL_GPIO_PIN_1);
-	LL_mDelay(500);
-	LL_GPIO_WriteOutputPort(GPIOB, 0);
+	LL_mDelay(100);
+	LL_GPIO_ResetOutputPin(GPIOB, LL_GPIO_PIN_1);
+	LL_mDelay(100);
+	LL_GPIO_SetOutputPin(GPIOB, LL_GPIO_PIN_1);
   }
   /* USER CODE END 3 */
 }
