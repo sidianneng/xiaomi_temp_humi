@@ -1,0 +1,6 @@
+r
+loadfile ./build/xiaomi_temp_humi.hex 0x08000000
+r
+g
+q
+
