@@ -52,7 +52,8 @@ Drivers/STM32L0xx_HAL_Driver/Src/stm32l0xx_ll_usart.c \
 Core/Src/system_stm32l0xx.c \
 Core/Src/log.c \
 Core/Src/SPI_Init.c \
-Core/Src/EPD.c
+Core/Src/EPD.c \
+Core/Src/EPD_GUI.c
 
 # ASM sources
 ASM_SOURCES =  \

@@ -4,10 +4,10 @@
 #include "stm32l0xx_ll_gpio.h"
 
 #define EPD_SCL_GPIO_PORT		GPIOA
-#define EPD_SCL_GPIO_PIN		LL_GPIO_PIN_1
+#define EPD_SCL_GPIO_PIN		LL_GPIO_PIN_0
 
 #define EPD_SDA_GPIO_PORT		GPIOA
-#define EPD_SDA_GPIO_PIN		LL_GPIO_PIN_3	
+#define EPD_SDA_GPIO_PIN		LL_GPIO_PIN_1	
 
 #define EPD_RES_GPIO_PORT		GPIOA
 #define EPD_RES_GPIO_PIN		LL_GPIO_PIN_4	
@@ -36,7 +36,7 @@
 #define EPD_CS_Clr() LL_GPIO_ResetOutputPin(EPD_CS_GPIO_PORT,EPD_CS_GPIO_PIN)
 #define EPD_CS_Set() LL_GPIO_SetOutputPin(EPD_CS_GPIO_PORT,EPD_CS_GPIO_PIN)
 
-#define EPD_ReadBusy LL_GPIO_IsOutputPinSet(EPD_BUSY_GPIO_PORT,EPD_BUSY_GPIO_PIN)
+#define EPD_ReadBusy LL_GPIO_IsInputPinSet(EPD_BUSY_GPIO_PORT,EPD_BUSY_GPIO_PIN)
 
 
 void EPD_GPIOInit(void);	//init the gpio for lcd

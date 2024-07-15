@@ -23,6 +23,8 @@
 #include "usart.h"
 #include "gpio.h"
 #include "log.h"
+#include "EPD_GUI.h"
+#include "Pic.h"
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
@@ -46,7 +48,7 @@
 /* Private variables ---------------------------------------------------------*/
 
 /* USER CODE BEGIN PV */
-
+uint8_t ImageBW[2888];
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -96,6 +98,22 @@ int main(void)
   MX_USART2_UART_Init();
   Log_Init();
   Log_Printf("xiaomi temp humi start\n");
+  Paint_NewImage(ImageBW,EPD_W,EPD_H,0,WHITE);
+  Paint_Clear(WHITE);
+  Log_Printf("lcd init ok\n");
+  EPD_FastMode1Init();
+  EPD_Display_Clear();
+  EPD_FastUpdate();
+  EPD_Clear_R26H();
+
+  EPD_ShowString(8,0,"1.54 inch E-Paper",16,BLACK);    
+  EPD_DrawRectangle(0,0,151,151,BLACK,0);
+  EPD_Display(ImageBW);
+  EPD_PartUpdate();
+  EPD_Update();
+
+  Log_Printf("lcd display pic ok\n");
+  uint32_t input_data = 0;
   /* USER CODE BEGIN 2 */
 
   /* USER CODE END 2 */
@@ -107,8 +125,8 @@ int main(void)
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
-    LL_mDelay(100);
-    Log_Printf("loop test\n");
+    LL_mDelay(500);
+    Log_Printf("loop test %d\n", input_data);
   }
   /* USER CODE END 3 */
 }
