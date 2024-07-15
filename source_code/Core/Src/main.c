@@ -106,14 +106,10 @@ int main(void)
   EPD_FastUpdate();
   EPD_Clear_R26H();
 
-  EPD_ShowString(8,0,"1.54 inch E-Paper",16,BLACK);    
-  EPD_DrawRectangle(0,0,151,151,BLACK,0);
-  EPD_Display(ImageBW);
-  EPD_PartUpdate();
-  EPD_Update();
-
   Log_Printf("lcd display pic ok\n");
   uint32_t input_data = 0;
+  float num=12.05;
+  uint8_t dat = 0;
   /* USER CODE BEGIN 2 */
 
   /* USER CODE END 2 */
@@ -125,8 +121,20 @@ int main(void)
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
-    LL_mDelay(500);
+    LL_mDelay(2000);
     Log_Printf("loop test %d\n", input_data);
+    EPD_ShowWatch(12,60,num,4,2,48,BLACK);
+    EPD_Display(ImageBW);
+    EPD_PartUpdate();
+    dat++;
+    num+=0.01;
+    if(dat % 5 == 0) {
+	    EPD_Init();
+            EPD_FastMode1Init();
+	    EPD_Display_Clear();
+  	    EPD_FastUpdate();
+  	    EPD_Clear_R26H();
+    }
   }
   /* USER CODE END 3 */
 }
