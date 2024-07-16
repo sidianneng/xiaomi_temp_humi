@@ -141,6 +141,20 @@ void SysTick_Handler(void)
 /* please refer to the startup file (startup_stm32l0xx.s).                    */
 /******************************************************************************/
 
+/**
+  * @brief This function handles I2C1 event global interrupt / I2C1 wake-up interrupt through EXTI line 23.
+  */
+void I2C1_IRQHandler(void)
+{
+  /* USER CODE BEGIN I2C1_IRQn 0 */
+
+  /* USER CODE END I2C1_IRQn 0 */
+
+  /* USER CODE BEGIN I2C1_IRQn 1 */
+
+  /* USER CODE END I2C1_IRQn 1 */
+}
+
 /* USER CODE BEGIN 1 */
 
 /* USER CODE END 1 */
