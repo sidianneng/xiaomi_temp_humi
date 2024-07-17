@@ -1,14 +1,19 @@
-## 编译准备工作
+## preparation of compile
 ```
 apt install gcc-arm-none-eabi
 ```
 
-## 编译固件
+## compile image
 ```
 make
 ```
 
-## 获取固件
+## where is the image
 ```
 ls ./build/*.hex
+```
+
+## download the image
+```
+./tools/download.sh
 ```
