@@ -145,12 +145,22 @@ void SysTick_Handler(void)
 /**
   * @brief This function handles I2C1 event global interrupt / I2C1 wake-up interrupt through EXTI line 23.
   */
+#define I2C_BUFFER_SIZE 6 
+uint8_t i2c_buffer[I2C_BUFFER_SIZE];
+volatile uint8_t i2c_data_index = 0;
 void I2C1_IRQHandler(void)
 {
   /* USER CODE BEGIN I2C1_IRQn 0 */
   if(LL_I2C_IsActiveFlag_RXNE(I2C1)){
-	  Log_Printf("rv:0x%x\n", LL_I2C_ReceiveData8(I2C1));
-
+	  //Log_Printf("rv:0x%x\n", LL_I2C_ReceiveData8(I2C1));
+	  if(i2c_data_index < I2C_BUFFER_SIZE) {
+		  i2c_buffer[i2c_data_index++] = LL_I2C_ReceiveData8(I2C1);
+	  }
+	  if(i2c_data_index == I2C_BUFFER_SIZE){
+		  for(uint8_t i = 0;i < I2C_BUFFER_SIZE; ++i)
+			  Log_Printf("index%d:0x%x\n", i, i2c_buffer[i]);
+		  i2c_data_index = 0;
+	  }
   }
   /* USER CODE END I2C1_IRQn 0 */
 
