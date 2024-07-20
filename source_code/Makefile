@@ -53,7 +53,8 @@ Core/Src/system_stm32l0xx.c \
 Core/Src/log.c \
 Core/Src/SPI_Init.c \
 Core/Src/EPD.c \
-Core/Src/EPD_GUI.c
+Core/Src/EPD_GUI.c \
+Core/Src/i2c_slave.c
 
 # ASM sources
 ASM_SOURCES =  \
