@@ -22,6 +22,7 @@
 #include "main.h"
 #include "stm32l0xx_it.h"
 #include "log.h"
+#include "i2c_slave.h"
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 /* USER CODE END Includes */
@@ -145,30 +146,23 @@ void SysTick_Handler(void)
 /**
   * @brief This function handles I2C1 event global interrupt / I2C1 wake-up interrupt through EXTI line 23.
   */
-#define I2C_BUFFER_SIZE 6 
-uint8_t i2c_buffer[I2C_BUFFER_SIZE];
 volatile uint8_t i2c_data_index = 0;
-volatile uint8_t i2c_rev_end = 0;
+extern struct I2c_Slave_Pack i2c_slave_pack;
+extern struct Lcd_Data_Pack lcd_data_pack; 
 void I2C1_IRQHandler(void)
 {
   /* USER CODE BEGIN I2C1_IRQn 0 */
   if(LL_I2C_IsActiveFlag_RXNE(I2C1)){
-	  i2c_rev_end = 0;
-	  //Log_Printf("rv:0x%x\n", LL_I2C_ReceiveData8(I2C1));
-	  if(i2c_data_index < I2C_BUFFER_SIZE) {
-		  i2c_buffer[i2c_data_index++] = LL_I2C_ReceiveData8(I2C1);
-	  }
-	  if(i2c_data_index == I2C_BUFFER_SIZE){
-		  for(uint8_t i = 0;i < I2C_BUFFER_SIZE; ++i)
-			  Log_Printf("index%d:0x%x\n", i, i2c_buffer[i]);
-		  i2c_data_index = 0;
+	  i2c_slave_pack.raw_data_len = 0;
+	  if(i2c_data_index < sizeof(i2c_slave_pack.raw_data)) {
+		  i2c_slave_pack.raw_data[i2c_data_index++] = LL_I2C_ReceiveData8(I2C1);
 	  }
   }
 
   if(LL_I2C_IsActiveFlag_STOP(I2C1)) {
 	  LL_I2C_ClearFlag_STOP(I2C1);
-	  i2c_rev_end = 1;
-	  Log_Printf("i2c rev end\n");
+	  i2c_slave_pack.raw_data_len = i2c_data_index;
+	  i2c_data_index = 0;
   }
   /* USER CODE END I2C1_IRQn 0 */
 

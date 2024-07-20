@@ -25,6 +25,7 @@
 #include "log.h"
 #include "EPD_GUI.h"
 #include "Pic.h"
+#include "i2c_slave.h"
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
@@ -49,6 +50,9 @@
 
 /* USER CODE BEGIN PV */
 uint8_t ImageBW[2888];
+
+struct I2c_Slave_Pack i2c_slave_pack;
+struct Lcd_Data_Pack lcd_data_pack;
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -121,20 +125,32 @@ int main(void)
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
-    LL_mDelay(2000);
-    Log_Printf("loop test %d\n", input_data);
-    EPD_ShowWatch(12,60,num,4,2,48,BLACK);
-    EPD_Display(ImageBW);
-    EPD_PartUpdate();
-    dat++;
-    num+=0.01;
-    if(dat % 5 == 0) {
-	    EPD_Init();
-            EPD_FastMode1Init();
-	    EPD_Display_Clear();
-  	    EPD_FastUpdate();
-  	    EPD_Clear_R26H();
+    LL_mDelay(1000);
+    Log_Printf("loop test %d\n", i2c_slave_pack.raw_data_len);
+    if(i2c_slave_pack.raw_data_len) {
+            for(uint8_t i = 0;i < i2c_slave_pack.raw_data_len; i++)
+        	    Log_Printf("0x%x\n", i2c_slave_pack.raw_data[i]);
+            i2c_slave_pack.raw_data_len = 0;
+	    Update_Lcd_Data(&i2c_slave_pack, &lcd_data_pack);
+	    Log_Printf("temp:%d\n", (uint16_t)lcd_data_pack.temp*10);
+	    Log_Printf("humi:%d\n", lcd_data_pack.humi);
+	    Log_Printf("smile:%d\n", lcd_data_pack.smile);
+	    Log_Printf("ble:%d\n", lcd_data_pack.ble);
+	    Log_Printf("format:%d\n", lcd_data_pack.temp_format);
+	    Log_Printf("battery:%d\n", lcd_data_pack.battery);
     }
+    //EPD_ShowWatch(12,60,num,4,2,48,BLACK);
+    //EPD_Display(ImageBW);
+    //EPD_PartUpdate();
+    //dat++;
+    //num+=0.01;
+    //if(dat % 5 == 0) {
+    //        EPD_Init();
+    //        EPD_FastMode1Init();
+    //        EPD_Display_Clear();
+    //        EPD_FastUpdate();
+    //        EPD_Clear_R26H();
+    //}
   }
   /* USER CODE END 3 */
 }
