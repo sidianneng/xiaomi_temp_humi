@@ -28,20 +28,15 @@ enum Temp_Format {
 };
 
 struct Lcd_Data_Pack {
-	uint8_t temp;
-	uint8_t humi;
-	uint8_t smile;
-	uint8_t ble; 
-	enum Temp_Format temp_format;
-	uint8_t battery;
+	float temp;
+	int8_t humi;
+	int8_t smile;
+	int8_t ble; 
+	int8_t temp_format;
+	int8_t battery;
 };
 
-uint8_t Get_Temperature(void);
-uint8_t Get_Humidity(void);
-uint8_t Get_Smile(void);
-uint8_t Get_Ble(void);
-enum Temp_Format Get_Temp_Format(void);
-uint8_t Get_Battery(void);
+int8_t Update_Lcd_Data(struct I2c_Slave_Pack* i2c_slave_pack, struct Lcd_Data_Pack* lcd_data_pack);
 
 #ifdef __cplusplus
 }
