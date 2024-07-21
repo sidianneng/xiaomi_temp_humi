@@ -132,7 +132,7 @@ int main(void)
         	    Log_Printf("0x%x\n", i2c_slave_pack.raw_data[i]);
             i2c_slave_pack.raw_data_len = 0;
 	    Update_Lcd_Data(&i2c_slave_pack, &lcd_data_pack);
-	    Log_Printf("temp:%d\n", (uint16_t)lcd_data_pack.temp*10);
+	    Log_Printf("temp:%d\n", (uint16_t)(lcd_data_pack.temp*10));
 	    Log_Printf("humi:%d\n", lcd_data_pack.humi);
 	    Log_Printf("smile:%d\n", lcd_data_pack.smile);
 	    Log_Printf("ble:%d\n", lcd_data_pack.ble);
