@@ -1,15 +1,4 @@
-#include "main.h"
-#include "dwt_stm32_delay.h"
 #include "stm32_sw_i2c.h"
-
-//void I2C_bus_init(uint8_t scl_pin, uint8_t sda_pin, uint8_t port){
-//	  /*Configure GPIO pins : SW_I2C_SCL_Pin SW_I2C_SDA_Pin */
-//	  GPIO_InitStruct.Pin = SW_I2C_SCL_Pin|SW_I2C_SDA_Pin;
-//	  GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_OD;
-//	  GPIO_InitStruct.Pull = GPIO_PULLUP;
-//	  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_HIGH;
-//	  HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
-//}
 
 #define true 1
 #define false 0
@@ -56,7 +45,7 @@ void I2C_write_bit(uint8_t b)
 
 uint8_t I2C_read_SDA(void)
 {
-    if (HAL_GPIO_ReadPin(SW_I2C_SDA_GPIO_Port, SW_I2C_SDA_Pin) == GPIO_PIN_SET)
+    if (I2C_READ_SDA)
         return 1;
     else
         return 0;
@@ -238,3 +227,4 @@ _Bool I2C_receive(uint8_t address, uint8_t reg[], uint8_t *data, uint8_t reg_siz
     I2C_stop_cond();
     return false;
 }
+
