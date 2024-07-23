@@ -16,11 +16,10 @@
 
 #define I2C_CLEAR_SDA LL_GPIO_ResetOutputPin(SW_I2C_SDA_GPIO_Port, SW_I2C_SDA_Pin);
 #define I2C_SET_SDA   LL_GPIO_SetOutputPin(SW_I2C_SDA_GPIO_Port, SW_I2C_SDA_Pin);
-//#define I2C_READ_SDA {if (HAL_GPIO_ReadPin(SW_I2C_SDA_GPIO_Port, SW_I2C_SDA_Pin)) == GPIO_PIN_SET) return 1; else return 0; return 0;};
 #define I2C_READ_SDA LL_GPIO_IsInputPinSet(SW_I2C_SDA_GPIO_Port, SW_I2C_SDA_Pin)
 #define I2C_CLEAR_SCL LL_GPIO_ResetOutputPin(SW_I2C_SCL_GPIO_Port, SW_I2C_SCL_Pin);
 #define I2C_SET_SCL   LL_GPIO_SetOutputPin(SW_I2C_SCL_GPIO_Port, SW_I2C_SCL_Pin);
-#define I2C_DELAY DWT_Delay_us(5); // 5 microsecond delay
+#define I2C_DELAY DWT_Delay_us(1); // 1 microsecond delay
 
 void I2C_init(void);
 
