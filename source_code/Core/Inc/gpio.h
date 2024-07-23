@@ -32,7 +32,10 @@ extern "C" {
 /* USER CODE END Includes */
 
 /* USER CODE BEGIN Private defines */
-
+#define RTC_SDA_Pin LL_GPIO_PIN_13
+#define RTC_SDA_GPIO_Port GPIOA
+#define RTC_SCL_Pin LL_GPIO_PIN_14
+#define RTC_SCL_GPIO_Port GPIOA
 /* USER CODE END Private defines */
 
 void MX_GPIO_Init(void);

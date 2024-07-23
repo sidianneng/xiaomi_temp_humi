@@ -102,6 +102,7 @@ int main(void)
   MX_USART2_UART_Init();
   Log_Init();
   Log_Printf("xiaomi temp humi start\n");
+  I2C_init();//software i2c init
   Paint_NewImage(ImageBW,EPD_W,EPD_H,0,WHITE);
   Paint_Clear(WHITE);
   Log_Printf("lcd init ok\n");
@@ -115,7 +116,7 @@ int main(void)
   float num=12.05;
   uint8_t dat = 0;
   /* USER CODE BEGIN 2 */
-
+  Log_Printf("i2c ack:%d\n", I2C_write_byte(0xa2, 1, 1));
   /* USER CODE END 2 */
 
   /* Infinite loop */
