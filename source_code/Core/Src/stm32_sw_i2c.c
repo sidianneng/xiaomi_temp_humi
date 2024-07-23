@@ -90,7 +90,7 @@ _Bool I2C_write_byte(uint8_t B,
     if (stop)
         I2C_stop_cond();
 
-    return !ack; //0-ack, 1-nack
+    return !ack; //0-nack, 1-ack
 }
 
 // Reading a byte with I2C:
