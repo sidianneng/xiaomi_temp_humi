@@ -116,7 +116,14 @@ int main(void)
   float num=12.05;
   uint8_t dat = 0;
   /* USER CODE BEGIN 2 */
-  Log_Printf("i2c ack:%d\n", I2C_write_byte(0xa2, 1, 1));
+  uint8_t rx_buf[16] = {0x00};
+  uint8_t j;
+  I2C_write_byte(0xa3, 1, 0);
+  for(j = 0;j < sizeof(rx_buf) - 1; ++j)
+	  rx_buf[j] = I2C_read_byte(1,0);
+  rx_buf[j] = I2C_read_byte(1,1);
+  for(j = 0;j < sizeof(rx_buf); ++j)
+         Log_Printf(" 0x%x", rx_buf[j]);
   /* USER CODE END 2 */
 
   /* Infinite loop */
