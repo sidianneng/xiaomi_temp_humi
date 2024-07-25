@@ -100,6 +100,7 @@ int main(void)
   MX_GPIO_Init();
   MX_I2C1_Init();
   MX_USART2_UART_Init();
+  MX_RTC_Init();
   Log_Init();
   Log_Printf("xiaomi temp humi start\n");
   Paint_NewImage(ImageBW,EPD_W,EPD_H,0,WHITE);
@@ -130,6 +131,7 @@ int main(void)
     /* USER CODE BEGIN 3 */
     LL_mDelay(1000);
     Log_Printf("loop test %d\n", i2c_slave_pack.raw_data_len);
+    Log_Printf("rtc time:0x%x\n", LL_RTC_TIME_Get(RTC));
     LL_GPIO_TogglePin(GPIOB, LL_GPIO_PIN_1);
     if(i2c_slave_pack.raw_data_len) {
             for(uint8_t i = 0;i < i2c_slave_pack.raw_data_len; i++)
@@ -178,6 +180,22 @@ void SystemClock_Config(void)
 
   }
   LL_RCC_HSI_SetCalibTrimming(16);
+  LL_PWR_EnableBkUpAccess();
+  LL_RCC_LSE_SetDriveCapability(LL_RCC_LSEDRIVE_LOW);
+  LL_RCC_LSE_Enable();
+
+   /* Wait till LSE is ready */
+  while(LL_RCC_LSE_IsReady() != 1)
+  {
+
+  }
+  if(LL_RCC_GetRTCClockSource() != LL_RCC_RTC_CLKSOURCE_LSE)
+  {
+    LL_RCC_ForceBackupDomainReset();
+    LL_RCC_ReleaseBackupDomainReset();
+    LL_RCC_SetRTCClockSource(LL_RCC_RTC_CLKSOURCE_LSE);
+  }
+  LL_RCC_EnableRTC();
   LL_RCC_PLL_ConfigDomain_SYS(LL_RCC_PLLSOURCE_HSI, LL_RCC_PLL_MUL_3, LL_RCC_PLL_DIV_2);
   LL_RCC_PLL_Enable();
 

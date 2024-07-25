@@ -49,12 +49,14 @@ Drivers/STM32L0xx_HAL_Driver/Src/stm32l0xx_ll_utils.c \
 Drivers/STM32L0xx_HAL_Driver/Src/stm32l0xx_ll_exti.c \
 Drivers/STM32L0xx_HAL_Driver/Src/stm32l0xx_ll_pwr.c \
 Drivers/STM32L0xx_HAL_Driver/Src/stm32l0xx_ll_usart.c \
+Drivers/STM32L0xx_HAL_Driver/Src/stm32l0xx_ll_rtc.c \
 Core/Src/system_stm32l0xx.c \
 Core/Src/log.c \
 Core/Src/SPI_Init.c \
 Core/Src/EPD.c \
 Core/Src/EPD_GUI.c \
-Core/Src/i2c_slave.c
+Core/Src/i2c_slave.c \
+Core/Src/rtc.c
 
 # ASM sources
 ASM_SOURCES =  \
