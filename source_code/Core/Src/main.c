@@ -127,6 +127,7 @@ int main(void)
     /* USER CODE BEGIN 3 */
     LL_mDelay(1000);
     Log_Printf("loop test %d\n", i2c_slave_pack.raw_data_len);
+    LL_GPIO_TogglePin(GPIOB, LL_GPIO_PIN_1);
     if(i2c_slave_pack.raw_data_len) {
             for(uint8_t i = 0;i < i2c_slave_pack.raw_data_len; i++)
         	    Log_Printf("0x%x\n", i2c_slave_pack.raw_data[i]);
