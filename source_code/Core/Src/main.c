@@ -114,6 +114,9 @@ int main(void)
   uint32_t input_data = 0;
   float num=12.05;
   uint8_t dat = 0;
+
+  NVIC_EnableIRQ(EXTI4_15_IRQn);
+  NVIC_SetPriority(EXTI4_15_IRQn, 1);
   /* USER CODE BEGIN 2 */
 
   /* USER CODE END 2 */
