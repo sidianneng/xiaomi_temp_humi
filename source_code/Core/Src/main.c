@@ -115,6 +115,7 @@ int main(void)
   uint32_t input_data = 0;
   float num=12.05;
   uint8_t dat = 0;
+  uint32_t time;
 
   NVIC_EnableIRQ(EXTI4_15_IRQn);
   NVIC_SetPriority(EXTI4_15_IRQn, 1);
@@ -131,7 +132,13 @@ int main(void)
     /* USER CODE BEGIN 3 */
     LL_mDelay(1000);
     Log_Printf("loop test %d\n", i2c_slave_pack.raw_data_len);
-    Log_Printf("rtc time:0x%x\n", LL_RTC_TIME_Get(RTC));
+    time = LL_RTC_TIME_Get(RTC);
+    Log_Printf("rtc year:%d\n", __LL_RTC_CONVERT_BCD2BIN(LL_RTC_DATE_GetYear(RTC)));
+    Log_Printf("rtc month:%d\n", __LL_RTC_CONVERT_BCD2BIN(LL_RTC_DATE_GetMonth(RTC)));
+    Log_Printf("rtc weekday:%d\n", __LL_RTC_CONVERT_BCD2BIN(LL_RTC_DATE_GetWeekDay(RTC)));
+    Log_Printf("rtc hour:%d\n", __LL_RTC_CONVERT_BCD2BIN(LL_RTC_TIME_GetHour(RTC)));
+    Log_Printf("rtc min:%d\n", __LL_RTC_CONVERT_BCD2BIN(LL_RTC_TIME_GetMinute(RTC)));
+    Log_Printf("rtc sec:%d\n", __LL_RTC_CONVERT_BCD2BIN(LL_RTC_TIME_GetSecond(RTC)));
     LL_GPIO_TogglePin(GPIOB, LL_GPIO_PIN_1);
     if(i2c_slave_pack.raw_data_len) {
             for(uint8_t i = 0;i < i2c_slave_pack.raw_data_len; i++)
