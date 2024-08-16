@@ -50,12 +50,12 @@ void MX_RTC_Init(void)
   LL_RTC_Init(RTC, &RTC_InitStruct);
   /** Initialize RTC and set the Time and Date
   */
-  RTC_TimeStruct.Hours = 0;
-  RTC_TimeStruct.Minutes = 0;
+  RTC_TimeStruct.Hours = 0x21;
+  RTC_TimeStruct.Minutes = 0x23;
   RTC_TimeStruct.Seconds = 0;
   LL_RTC_TIME_Init(RTC, LL_RTC_FORMAT_BCD, &RTC_TimeStruct);
-  RTC_DateStruct.WeekDay = LL_RTC_WEEKDAY_MONDAY;
-  RTC_DateStruct.Month = LL_RTC_MONTH_JANUARY;
+  RTC_DateStruct.WeekDay = LL_RTC_WEEKDAY_FRIDAY;
+  RTC_DateStruct.Month = LL_RTC_MONTH_JULY;
   RTC_DateStruct.Day = 1;
   RTC_DateStruct.Year = 0;
   LL_RTC_DATE_Init(RTC, LL_RTC_FORMAT_BCD, &RTC_DateStruct);
