@@ -60,7 +60,6 @@ void MX_RTC_Init(void)
   RTC_DateStruct.Year = 0;
   LL_RTC_DATE_Init(RTC, LL_RTC_FORMAT_BCD, &RTC_DateStruct);
   /* USER CODE BEGIN RTC_Init 2 */
-
   /* USER CODE END RTC_Init 2 */
 
 }
