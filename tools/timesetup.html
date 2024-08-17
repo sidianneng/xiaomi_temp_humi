@@ -1,0 +1,93 @@
+<html class="timesetup"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>sidianneng</title>
+</head>
+<body>
+<script>
+
+let serialport;  // Global variable to store the selected serial port
+let allDigitTime;  // Global variable to store the time string
+
+async function connect() {
+  if ("serial" in navigator) {
+    try {
+      // Request a serial port
+      serialport = await navigator.serial.requestPort();
+      
+      // Optionally, open the port with specific settings
+      await serialport.open({ baudRate: 115200 });
+		
+	  console.log(`Connected to serialport with Vendor ID: ${serialport.getInfo().usbVendorId}, Product ID: ${serialport.getInfo().usbProductId}`);
+      
+      // You can add additional logic here to read from/write to the port
+
+    } catch (error) {
+      // Handle errors (e.g., user cancels the request)
+      alert(`Error: ${error.message}`);
+    }
+  } else {
+    // If Web Serial API is not supported, notify the user
+    alert("Web Serial API is not supported in this browser.");
+  }
+}
+
+function gettime() {
+  // Get the current date and time
+  const now = new Date();
+
+  // Format the time in all-digit format: YYYYMMDDHHMMSS
+  const year = now.getFullYear();
+  const month = String(now.getMonth() + 1).padStart(2, '0'); // Months are zero-indexed
+  const day = String(now.getDate()).padStart(2, '0');
+  const hours = String(now.getHours()).padStart(2, '0');
+  const minutes = String(now.getMinutes()).padStart(2, '0');
+  const seconds = String(now.getSeconds()).padStart(2, '0');
+
+  // Combine them into a single string
+  allDigitTime = `${year}${month}${day}${hours}${minutes}${seconds}`;
+
+  // Print the formatted time to the log
+  const logElement = document.getElementById("log");
+  logElement.innerHTML += `Current Time (All Digits): ${allDigitTime}<br>`;
+}
+
+async function settime() {
+
+  if (!serialport) {
+    alert("Please connect to a serial port first.");
+    return;
+  }
+  
+  if (!allDigitTime) {
+    alert("Please get the current time first.");
+    return;
+  }
+
+  try {
+    const encoder = new TextEncoder();
+    const writer = serialport.writable.getWriter();
+    
+    // Send the time string to the serial port
+    await writer.write(encoder.encode(allDigitTime));
+
+    // Release the writer
+    writer.releaseLock();
+
+    // Log the success message
+    const logElement = document.getElementById("log");
+    logElement.innerHTML += `Sent time to serial serialport: ${allDigitTime}<br>`;
+    
+  } catch (error) {
+    alert(`Failed to send time to the serial serialport: ${error.message}`);
+  }
+
+}
+
+</script>
+<big><big>Time Setup</big></big><br>
+  <button type="button" onclick="connect();">Connect</button>
+  <button type="button" onclick="gettime();">GetTime</button>
+  <button type="button" onclick="settime();">SetTime</button><br><br>
+  <div id="log">Log:<br></div>
+  <div id="result"></div>
+</body></html>
