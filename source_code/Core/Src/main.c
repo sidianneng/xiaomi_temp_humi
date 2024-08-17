@@ -58,6 +58,9 @@ uint32_t last_key_cnt = 0;
 extern uint32_t key_cnt;
 
 extern uint8_t uart_data[], uart_data_ready;
+
+static LL_RTC_TimeTypeDef RTC_TimeStruct = {0};
+static LL_RTC_DateTypeDef RTC_DateStruct = {0};
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -191,8 +194,23 @@ int main(void)
 
     if(uart_data_ready) {
 	    Log_Printf("u:%s\n", uart_data);
+	    RTC_TimeStruct.Hours =   (uart_data[8] - 0x30) * 0x10 + (uart_data[9] - 0x30);
+	    RTC_TimeStruct.Minutes = (uart_data[10] - 0x30) * 0x10 + (uart_data[11] - 0x30);
+	    RTC_TimeStruct.Seconds = (uart_data[12] - 0x30) * 0x10 + (uart_data[13] - 0x30);
+	    LL_RTC_TIME_Init(RTC, LL_RTC_FORMAT_BCD, &RTC_TimeStruct);
+	    RTC_DateStruct.Month = (uart_data[4] - 0x30) * 0x10 + (uart_data[5] - 0x30);
+	    RTC_DateStruct.Day = (uart_data[6] - 0x30) * 0x10 + (uart_data[7] - 0x30);
+  	    RTC_DateStruct.Year =(uart_data[2] - 0x30) * 0x10 + (uart_data[3] - 0x30) ;
+  	    LL_RTC_DATE_Init(RTC, LL_RTC_FORMAT_BCD, &RTC_DateStruct);
 	    uart_data_ready = 0;
     }
+
+    Log_Printf("rtc year:%d\n", __LL_RTC_CONVERT_BCD2BIN(LL_RTC_DATE_GetYear(RTC)));
+    Log_Printf("rtc month:%d\n", __LL_RTC_CONVERT_BCD2BIN(LL_RTC_DATE_GetMonth(RTC)));
+    Log_Printf("rtc weekday:%d\n", __LL_RTC_CONVERT_BCD2BIN(LL_RTC_DATE_GetWeekDay(RTC)));
+    Log_Printf("rtc hour:%d\n", __LL_RTC_CONVERT_BCD2BIN(LL_RTC_TIME_GetHour(RTC)));
+    Log_Printf("rtc min:%d\n", __LL_RTC_CONVERT_BCD2BIN(LL_RTC_TIME_GetMinute(RTC)));
+    Log_Printf("rtc sec:%d\n", __LL_RTC_CONVERT_BCD2BIN(LL_RTC_TIME_GetSecond(RTC)));
   }
   /* USER CODE END 3 */
 }
