@@ -113,9 +113,11 @@ int main(void)
 
   Log_Printf("lcd display pic ok\n");
   uint32_t input_data = 0;
-  float num=12.05;
+  float float_time=12.11;
+  float float_num=28.9;
   uint8_t dat = 0;
   uint32_t time;
+  uint32_t number = 79;
 
   NVIC_EnableIRQ(EXTI4_15_IRQn);
   NVIC_SetPriority(EXTI4_15_IRQn, 1);
@@ -132,38 +134,37 @@ int main(void)
     /* USER CODE BEGIN 3 */
     LL_mDelay(1000);
     Log_Printf("loop test %d\n", i2c_slave_pack.raw_data_len);
-    time = LL_RTC_TIME_Get(RTC);
-    Log_Printf("rtc year:%d\n", __LL_RTC_CONVERT_BCD2BIN(LL_RTC_DATE_GetYear(RTC)));
-    Log_Printf("rtc month:%d\n", __LL_RTC_CONVERT_BCD2BIN(LL_RTC_DATE_GetMonth(RTC)));
-    Log_Printf("rtc weekday:%d\n", __LL_RTC_CONVERT_BCD2BIN(LL_RTC_DATE_GetWeekDay(RTC)));
-    Log_Printf("rtc hour:%d\n", __LL_RTC_CONVERT_BCD2BIN(LL_RTC_TIME_GetHour(RTC)));
-    Log_Printf("rtc min:%d\n", __LL_RTC_CONVERT_BCD2BIN(LL_RTC_TIME_GetMinute(RTC)));
-    Log_Printf("rtc sec:%d\n", __LL_RTC_CONVERT_BCD2BIN(LL_RTC_TIME_GetSecond(RTC)));
-    LL_GPIO_TogglePin(GPIOB, LL_GPIO_PIN_1);
+    //time = LL_RTC_TIME_Get(RTC);
+    //Log_Printf("rtc year:%d\n", __LL_RTC_CONVERT_BCD2BIN(LL_RTC_DATE_GetYear(RTC)));
+    //Log_Printf("rtc month:%d\n", __LL_RTC_CONVERT_BCD2BIN(LL_RTC_DATE_GetMonth(RTC)));
+    //Log_Printf("rtc weekday:%d\n", __LL_RTC_CONVERT_BCD2BIN(LL_RTC_DATE_GetWeekDay(RTC)));
+    //Log_Printf("rtc hour:%d\n", __LL_RTC_CONVERT_BCD2BIN(LL_RTC_TIME_GetHour(RTC)));
+    //Log_Printf("rtc min:%d\n", __LL_RTC_CONVERT_BCD2BIN(LL_RTC_TIME_GetMinute(RTC)));
+    //Log_Printf("rtc sec:%d\n", __LL_RTC_CONVERT_BCD2BIN(LL_RTC_TIME_GetSecond(RTC)));
     if(i2c_slave_pack.raw_data_len) {
-            for(uint8_t i = 0;i < i2c_slave_pack.raw_data_len; i++)
-        	    Log_Printf("0x%x\n", i2c_slave_pack.raw_data[i]);
+	    Log_Printf("lcd data update\n");
+        //    for(uint8_t i = 0;i < i2c_slave_pack.raw_data_len; i++)
+        //	    Log_Printf("0x%x\n", i2c_slave_pack.raw_data[i]);
             i2c_slave_pack.raw_data_len = 0;
-	    Update_Lcd_Data(&i2c_slave_pack, &lcd_data_pack);
-	    Log_Printf("temp:%d\n", (uint16_t)(lcd_data_pack.temp*10));
-	    Log_Printf("humi:%d\n", lcd_data_pack.humi);
-	    Log_Printf("smile:%d\n", lcd_data_pack.smile);
-	    Log_Printf("ble:%d\n", lcd_data_pack.ble);
-	    Log_Printf("format:%d\n", lcd_data_pack.temp_format);
-	    Log_Printf("battery:%d\n", lcd_data_pack.battery);
+            Update_Lcd_Data(&i2c_slave_pack, &lcd_data_pack);
+            Log_Printf("temp:%d\n", (uint16_t)(lcd_data_pack.temp*10));
+            Log_Printf("humi:%d\n", lcd_data_pack.humi);
+            Log_Printf("smile:%d\n", lcd_data_pack.smile);
+            Log_Printf("ble:%d\n", lcd_data_pack.ble);
+            Log_Printf("format:%d\n", lcd_data_pack.temp_format);
+            Log_Printf("battery:%d\n", lcd_data_pack.battery);
+	    EPD_ShowNum(32, 0, lcd_data_pack.smile, 1, 24, BLACK);
+	    if(lcd_data_pack.ble)
+		    EPD_ShowPicture(100, 0, 24, 24, gImage_bt_icon, BLACK);
+	    float_time = __LL_RTC_CONVERT_BCD2BIN(LL_RTC_TIME_GetHour(RTC)) + __LL_RTC_CONVERT_BCD2BIN(LL_RTC_TIME_GetMinute(RTC)) * 0.01;
+    	    EPD_ShowWatch(8,56,float_time, 4, 2, 48,BLACK);
+	    float_num = lcd_data_pack.temp;
+    	    EPD_ShowFloatNum1(8,106, float_num, 3, 1, 24,BLACK);
+	    number = lcd_data_pack.humi;
+    	    EPD_ShowNum(96,106, number, 2, 24,BLACK);
     }
-    //EPD_ShowWatch(12,60,num,4,2,48,BLACK);
-    //EPD_Display(ImageBW);
-    //EPD_PartUpdate();
-    //dat++;
-    //num+=0.01;
-    //if(dat % 5 == 0) {
-    //        EPD_Init();
-    //        EPD_FastMode1Init();
-    //        EPD_Display_Clear();
-    //        EPD_FastUpdate();
-    //        EPD_Clear_R26H();
-    //}
+    EPD_Display(ImageBW);
+    EPD_PartUpdate();
   }
   /* USER CODE END 3 */
 }
