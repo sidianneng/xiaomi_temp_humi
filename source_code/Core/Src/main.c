@@ -137,13 +137,6 @@ int main(void)
     /* USER CODE BEGIN 3 */
     LL_mDelay(1000);
     Log_Printf("loop test %d\n", key_cnt);
-    //time = LL_RTC_TIME_Get(RTC);
-    //Log_Printf("rtc year:%d\n", __LL_RTC_CONVERT_BCD2BIN(LL_RTC_DATE_GetYear(RTC)));
-    //Log_Printf("rtc month:%d\n", __LL_RTC_CONVERT_BCD2BIN(LL_RTC_DATE_GetMonth(RTC)));
-    //Log_Printf("rtc weekday:%d\n", __LL_RTC_CONVERT_BCD2BIN(LL_RTC_DATE_GetWeekDay(RTC)));
-    //Log_Printf("rtc hour:%d\n", __LL_RTC_CONVERT_BCD2BIN(LL_RTC_TIME_GetHour(RTC)));
-    //Log_Printf("rtc min:%d\n", __LL_RTC_CONVERT_BCD2BIN(LL_RTC_TIME_GetMinute(RTC)));
-    //Log_Printf("rtc sec:%d\n", __LL_RTC_CONVERT_BCD2BIN(LL_RTC_TIME_GetSecond(RTC)));
     if(i2c_slave_pack.raw_data_len) {
 	    Log_Printf("lcd data update\n");
         //    for(uint8_t i = 0;i < i2c_slave_pack.raw_data_len; i++)
