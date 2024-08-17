@@ -56,6 +56,8 @@ struct Lcd_Data_Pack lcd_data_pack;
 
 uint32_t last_key_cnt = 0;
 extern uint32_t key_cnt;
+
+extern uint8_t uart_data[], uart_data_ready;
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -186,6 +188,11 @@ int main(void)
     }
     EPD_Display(ImageBW);
     EPD_PartUpdate();
+
+    if(uart_data_ready) {
+	    Log_Printf("u:%s\n", uart_data);
+	    uart_data_ready = 0;
+    }
   }
   /* USER CODE END 3 */
 }
