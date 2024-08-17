@@ -172,12 +172,12 @@ void I2C1_IRQHandler(void)
 }
 
 /* USER CODE BEGIN 1 */
-#include "log.h"
+uint32_t key_cnt = 0;
 void EXTI4_15_IRQHandler(void)
 {
     if (LL_EXTI_IsActiveFlag_0_31(LL_EXTI_LINE_14) != RESET)
     {
-     	Log_Printf("key irq\n");   
+	key_cnt++;
         LL_EXTI_ClearFlag_0_31(LL_EXTI_LINE_14);
     }
 }

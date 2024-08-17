@@ -53,6 +53,9 @@ uint8_t ImageBW[2888];
 
 struct I2c_Slave_Pack i2c_slave_pack;
 struct Lcd_Data_Pack lcd_data_pack;
+
+uint32_t last_key_cnt = 0;
+extern uint32_t key_cnt;
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -133,7 +136,7 @@ int main(void)
 
     /* USER CODE BEGIN 3 */
     LL_mDelay(1000);
-    Log_Printf("loop test %d\n", i2c_slave_pack.raw_data_len);
+    Log_Printf("loop test %d\n", key_cnt);
     //time = LL_RTC_TIME_Get(RTC);
     //Log_Printf("rtc year:%d\n", __LL_RTC_CONVERT_BCD2BIN(LL_RTC_DATE_GetYear(RTC)));
     //Log_Printf("rtc month:%d\n", __LL_RTC_CONVERT_BCD2BIN(LL_RTC_DATE_GetMonth(RTC)));
@@ -156,12 +159,37 @@ int main(void)
 	    EPD_ShowNum(32, 0, lcd_data_pack.smile, 1, 24, BLACK);
 	    if(lcd_data_pack.ble)
 		    EPD_ShowPicture(100, 0, 24, 24, gImage_bt_icon, BLACK);
-	    float_time = __LL_RTC_CONVERT_BCD2BIN(LL_RTC_TIME_GetHour(RTC)) + __LL_RTC_CONVERT_BCD2BIN(LL_RTC_TIME_GetMinute(RTC)) * 0.01;
-    	    EPD_ShowWatch(8,56,float_time, 4, 2, 48,BLACK);
-	    float_num = lcd_data_pack.temp;
-    	    EPD_ShowFloatNum1(8,106, float_num, 3, 1, 24,BLACK);
-	    number = lcd_data_pack.humi;
-    	    EPD_ShowNum(96,106, number, 2, 24,BLACK);
+    }
+    if(last_key_cnt != key_cnt%3) {
+	Paint_Clear(WHITE);
+    	if(key_cnt%3 == 0) {
+    		float_time = __LL_RTC_CONVERT_BCD2BIN(LL_RTC_TIME_GetHour(RTC)) + __LL_RTC_CONVERT_BCD2BIN(LL_RTC_TIME_GetMinute(RTC)) * 0.01;
+    		EPD_ShowWatch(8,56,float_time, 4, 2, 48,BLACK);
+    		float_num = lcd_data_pack.temp;
+    		EPD_ShowFloatNum1(8,106, float_num, 3, 1, 24,BLACK);
+    		number = lcd_data_pack.humi;
+    		EPD_ShowNum(96,106, number, 2, 24,BLACK);
+    	} else if(key_cnt%3 == 1) {
+    		float_time = __LL_RTC_CONVERT_BCD2BIN(LL_RTC_TIME_GetHour(RTC)) + __LL_RTC_CONVERT_BCD2BIN(LL_RTC_TIME_GetMinute(RTC)) * 0.01;
+    		EPD_ShowWatch(8,106,float_time, 4, 2, 24,BLACK);
+    		float_num = lcd_data_pack.temp;
+    		EPD_ShowFloatNum1(8,56, float_num, 3, 1, 48,BLACK);
+    		number = lcd_data_pack.humi;
+    		EPD_ShowNum(96,106, number, 2, 24,BLACK);
+    	} else {
+    		float_time = __LL_RTC_CONVERT_BCD2BIN(LL_RTC_TIME_GetHour(RTC)) + __LL_RTC_CONVERT_BCD2BIN(LL_RTC_TIME_GetMinute(RTC)) * 0.01;
+    		EPD_ShowWatch(8,56,float_time, 4, 2, 24,BLACK);
+    		float_num = lcd_data_pack.temp;
+    		EPD_ShowFloatNum1(96,106, float_num, 3, 1, 24,BLACK);
+    		number = lcd_data_pack.humi;
+    		EPD_ShowNum(8,56, number, 2, 48,BLACK);
+    	}
+    	EPD_Init();
+    	EPD_FastMode1Init();
+    	EPD_Display_Clear();
+    	EPD_FastUpdate();
+    	EPD_Clear_R26H();
+	last_key_cnt = key_cnt%3;
     }
     EPD_Display(ImageBW);
     EPD_PartUpdate();
