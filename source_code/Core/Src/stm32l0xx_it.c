@@ -186,7 +186,7 @@ void EXTI4_15_IRQHandler(void)
   * @brief This function handles USART2 global interrupt / USART2 wake-up interrupt through EXTI line 26.
   */
 #include "log.h"
-uint8_t uart_data[10];
+uint8_t uart_data[20];
 uint8_t uart_index = 0;
 uint8_t uart_data_ready = 0;
 uint8_t temp;
