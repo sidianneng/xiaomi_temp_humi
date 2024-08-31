@@ -251,6 +251,8 @@ void EPD_ShowChar(uint16_t x,uint16_t y,uint16_t chr,uint16_t size1,uint16_t col
         {temp=asc2_2412[chr1][i];} //调用2412字体
     else if(size1==48)
         {temp=asc2_4824[chr1][i];} //调用2412字体
+    else if(size1==64)
+        {temp=asc2_6432[chr1][i];}
     else return;
     for(m=0;m<8;m++)
     {
