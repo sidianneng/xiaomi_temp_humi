@@ -118,6 +118,35 @@ int main(void)
   EPD_Display_Clear();
   EPD_FastUpdate();
   EPD_Clear_R26H();
+ 
+  //main page one
+  //EPD_ShowPicture(10, 14, 24, 24, gImage_2424_bat, BLACK);
+  //EPD_ShowPicture(44, 10, 64, 32, gImage_6432_smile_happy, BLACK);
+  //EPD_ShowPicture(120, 14, 24, 24, gImage_2424_bt, BLACK);
+  //EPD_ShowString(0,44,"12",64,BLACK);
+  //EPD_ShowPicture(64, 44, 24, 64, gImage_2464_colon, BLACK);
+  //EPD_ShowString(88 ,44,"33",64,BLACK);
+  //EPD_ShowString(20 ,114,"28.9",24,BLACK);
+  //EPD_ShowPicture(68, 114, 12, 24, gImage_1224_c, BLACK);
+  //EPD_ShowString(100 ,114,"78%",24,BLACK);
+
+  //main page two
+  //EPD_ShowPicture(10, 14, 24, 24, gImage_2424_bat, BLACK);
+  //EPD_ShowPicture(44, 10, 64, 32, gImage_6432_smile_happy, BLACK);
+  //EPD_ShowPicture(120, 14, 24, 24, gImage_2424_bt, BLACK);
+  //EPD_ShowString(0 ,44,"28.9", 64,BLACK);
+  //EPD_ShowPicture(128, 44, 12, 24, gImage_1224_c, BLACK);
+  //EPD_ShowString(10,114,"12:33",24,BLACK);
+  //EPD_ShowString(100 ,114,"78%",24,BLACK);
+
+  //main page three
+  //EPD_ShowPicture(10, 14, 24, 24, gImage_2424_bat, BLACK);
+  //EPD_ShowPicture(44, 10, 64, 32, gImage_6432_smile_happy, BLACK);
+  //EPD_ShowPicture(120, 14, 24, 24, gImage_2424_bt, BLACK);
+  //EPD_ShowString(32 ,44,"78%",64,BLACK);
+  //EPD_ShowString(10,114,"12:33",24,BLACK);
+  //EPD_ShowString(88 ,114,"28.9",24,BLACK);
+  //EPD_ShowPicture(140, 114, 12, 24, gImage_1224_c, BLACK);
 
   Log_Printf("lcd display pic ok\n");
   uint32_t input_data = 0;
@@ -156,7 +185,7 @@ int main(void)
             Log_Printf("battery:%d\n", lcd_data_pack.battery);
 	    EPD_ShowNum(32, 0, lcd_data_pack.smile, 1, 24, BLACK);
 	    if(lcd_data_pack.ble)
-		    EPD_ShowPicture(100, 0, 24, 24, gImage_bt_icon, BLACK);
+		    EPD_ShowPicture(100, 0, 24, 24, gImage_2424_bt, BLACK);
     }
     if(last_key_cnt != key_cnt%3) {
 	Paint_Clear(WHITE);
