@@ -159,14 +159,13 @@ int main(void)
   float temp;
   int8_t humi;
 
-  NVIC_EnableIRQ(EXTI4_15_IRQn);
-  NVIC_SetPriority(EXTI4_15_IRQn, 1);
-
   LL_GPIO_ResetOutputPin(GPIOB, LL_GPIO_PIN_1);
   LL_mDelay(50);
   LL_GPIO_SetOutputPin(GPIOB, LL_GPIO_PIN_1);
   /* USER CODE BEGIN 2 */
-
+  Log_Printf("enter sleep\n");
+  EnterSleepMode();
+  Log_Printf("wakeup from sleep\n");
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -199,7 +198,7 @@ int main(void)
 
     time_hour = __LL_RTC_CONVERT_BCD2BIN(LL_RTC_TIME_GetHour(RTC));
     time_min  = __LL_RTC_CONVERT_BCD2BIN(LL_RTC_TIME_GetMinute(RTC));
-    if(last_key_cnt == key_cnt%3) {
+    if(last_key_cnt != key_cnt%3) {
     	if(key_cnt%3 == 0) {
                 EPD_ShowNum(0, 44, time_hour, 2, 64, BLACK);
                 EPD_ShowPicture(64, 44, 24, 64, gImage_2464_colon, BLACK);
@@ -315,7 +314,18 @@ void SystemClock_Config(void)
 }
 
 /* USER CODE BEGIN 4 */
+void EnterSleepMode(void)
+{
+  LL_PWR_ClearFlag_WU();
+  /* Set Stop 0 mode when CPU enters deepsleep */
+  LL_PWR_SetPowerMode(LL_PWR_MODE_STOP);
 
+  /* Set SLEEPDEEP bit of Cortex System Control Register */
+  LL_LPM_EnableDeepSleep();
+
+  /* Request Wait For Interrupt */
+  __WFI();
+}
 /* USER CODE END 4 */
 
 /**
