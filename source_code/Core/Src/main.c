@@ -155,9 +155,16 @@ int main(void)
   uint8_t dat = 0;
   uint32_t time;
   uint32_t number = 79;
+  uint8_t time_hour, time_min;
+  float temp;
+  int8_t humi;
 
   NVIC_EnableIRQ(EXTI4_15_IRQn);
   NVIC_SetPriority(EXTI4_15_IRQn, 1);
+
+  LL_GPIO_ResetOutputPin(GPIOB, LL_GPIO_PIN_1);
+  LL_mDelay(50);
+  LL_GPIO_SetOutputPin(GPIOB, LL_GPIO_PIN_1);
   /* USER CODE BEGIN 2 */
 
   /* USER CODE END 2 */
@@ -172,9 +179,6 @@ int main(void)
     LL_mDelay(1000);
     Log_Printf("loop test %d\n", key_cnt);
     if(i2c_slave_pack.raw_data_len) {
-	    Log_Printf("lcd data update\n");
-        //    for(uint8_t i = 0;i < i2c_slave_pack.raw_data_len; i++)
-        //	    Log_Printf("0x%x\n", i2c_slave_pack.raw_data[i]);
             i2c_slave_pack.raw_data_len = 0;
             Update_Lcd_Data(&i2c_slave_pack, &lcd_data_pack);
             Log_Printf("temp:%d\n", (uint16_t)(lcd_data_pack.temp*10));
@@ -183,43 +187,48 @@ int main(void)
             Log_Printf("ble:%d\n", lcd_data_pack.ble);
             Log_Printf("format:%d\n", lcd_data_pack.temp_format);
             Log_Printf("battery:%d\n", lcd_data_pack.battery);
-	    EPD_ShowNum(32, 0, lcd_data_pack.smile, 1, 24, BLACK);
 	    if(lcd_data_pack.ble)
-		    EPD_ShowPicture(100, 0, 24, 24, gImage_2424_bt, BLACK);
+                EPD_ShowPicture(120, 14, 24, 24, gImage_2424_bt, BLACK);
+	    if(lcd_data_pack.smile == 1)
+		EPD_ShowPicture(44, 10, 64, 32, gImage_6432_smile_happy, BLACK);
+	    else if(lcd_data_pack.smile == 2)
+		EPD_ShowPicture(44, 10, 64, 32, gImage_6432_smile_sad, BLACK);
+	    temp = lcd_data_pack.temp;
+            humi = lcd_data_pack.humi;
     }
-    if(last_key_cnt != key_cnt%3) {
-	Paint_Clear(WHITE);
+
+    time_hour = __LL_RTC_CONVERT_BCD2BIN(LL_RTC_TIME_GetHour(RTC));
+    time_min  = __LL_RTC_CONVERT_BCD2BIN(LL_RTC_TIME_GetMinute(RTC));
+    if(last_key_cnt == key_cnt%3) {
     	if(key_cnt%3 == 0) {
-    		float_time = __LL_RTC_CONVERT_BCD2BIN(LL_RTC_TIME_GetHour(RTC)) + __LL_RTC_CONVERT_BCD2BIN(LL_RTC_TIME_GetMinute(RTC)) * 0.01;
-    		EPD_ShowWatch(8,56,float_time, 4, 2, 48,BLACK);
-    		float_num = lcd_data_pack.temp;
-    		EPD_ShowFloatNum1(8,106, float_num, 3, 1, 24,BLACK);
-    		number = lcd_data_pack.humi;
-    		EPD_ShowNum(96,106, number, 2, 24,BLACK);
+                EPD_ShowNum(0, 44, time_hour, 2, 64, BLACK);
+                EPD_ShowPicture(64, 44, 24, 64, gImage_2464_colon, BLACK);
+                EPD_ShowNum(88, 44, time_min, 2, 64, BLACK);
+                EPD_ShowFloatNum1(20, 114, temp, 3, 1, 24, BLACK);
+                EPD_ShowPicture(68, 114, 12, 24, gImage_1224_c, BLACK);
+                EPD_ShowNum(100 ,114, humi, 2, 24, BLACK);
+		EPD_ShowChar(124, 114, '%', 24, BLACK);
     	} else if(key_cnt%3 == 1) {
-    		float_time = __LL_RTC_CONVERT_BCD2BIN(LL_RTC_TIME_GetHour(RTC)) + __LL_RTC_CONVERT_BCD2BIN(LL_RTC_TIME_GetMinute(RTC)) * 0.01;
-    		EPD_ShowWatch(8,106,float_time, 4, 2, 24,BLACK);
-    		float_num = lcd_data_pack.temp;
-    		EPD_ShowFloatNum1(8,56, float_num, 3, 1, 48,BLACK);
-    		number = lcd_data_pack.humi;
-    		EPD_ShowNum(96,106, number, 2, 24,BLACK);
+                EPD_ShowFloatNum1(0 ,44, temp, 3, 1, 64, BLACK);
+                EPD_ShowPicture(128, 44, 12, 24, gImage_1224_c, BLACK);
+                EPD_ShowNum(10, 114, time_hour, 2, 24, BLACK);
+		EPD_ShowChar(34, 114, ':', 24, BLACK);
+                EPD_ShowNum(46, 114, time_min, 2, 24, BLACK);
+                EPD_ShowNum(100, 114, humi, 2, 24, BLACK);
+		EPD_ShowChar(124, 114, '%', 24, BLACK);
     	} else {
-    		float_time = __LL_RTC_CONVERT_BCD2BIN(LL_RTC_TIME_GetHour(RTC)) + __LL_RTC_CONVERT_BCD2BIN(LL_RTC_TIME_GetMinute(RTC)) * 0.01;
-    		EPD_ShowWatch(8,56,float_time, 4, 2, 24,BLACK);
-    		float_num = lcd_data_pack.temp;
-    		EPD_ShowFloatNum1(96,106, float_num, 3, 1, 24,BLACK);
-    		number = lcd_data_pack.humi;
-    		EPD_ShowNum(8,56, number, 2, 48,BLACK);
+                EPD_ShowNum(32, 44, humi, 2, 64, BLACK);
+		EPD_ShowChar(96, 44, '%', 64, BLACK);
+                EPD_ShowNum(10, 114, time_hour, 2, 24, BLACK);
+		EPD_ShowChar(34, 114, ':', 24, BLACK);
+                EPD_ShowNum(46, 114, time_min, 2, 24, BLACK);
+                EPD_ShowFloatNum1(88, 114, temp, 3, 1, 24, BLACK);
+                EPD_ShowPicture(140, 114, 12, 24, gImage_1224_c, BLACK);
     	}
-    	EPD_Init();
-    	EPD_FastMode1Init();
-    	EPD_Display_Clear();
-    	EPD_FastUpdate();
-    	EPD_Clear_R26H();
 	last_key_cnt = key_cnt%3;
+        EPD_Display(ImageBW);
+        EPD_PartUpdate();
     }
-    EPD_Display(ImageBW);
-    EPD_PartUpdate();
 
     if(uart_data_ready) {
 	    Log_Printf("u:%s\n", uart_data);
