@@ -165,6 +165,7 @@ int main(void)
   /* USER CODE BEGIN 2 */
   Log_Printf("enter sleep\n");
   EnterSleepMode();
+  SystemClock_Config();
   Log_Printf("wakeup from sleep\n");
   /* USER CODE END 2 */
 
@@ -316,7 +317,6 @@ void SystemClock_Config(void)
 /* USER CODE BEGIN 4 */
 void EnterSleepMode(void)
 {
-  LL_PWR_ClearFlag_WU();
   /* Set Stop 0 mode when CPU enters deepsleep */
   LL_PWR_SetPowerMode(LL_PWR_MODE_STOP);
 
