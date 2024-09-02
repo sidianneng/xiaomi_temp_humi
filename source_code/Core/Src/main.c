@@ -199,7 +199,9 @@ int main(void)
 
     time_hour = __LL_RTC_CONVERT_BCD2BIN(LL_RTC_TIME_GetHour(RTC));
     time_min  = __LL_RTC_CONVERT_BCD2BIN(LL_RTC_TIME_GetMinute(RTC));
-    if(last_key_cnt != key_cnt%3) {
+    //if(last_key_cnt != key_cnt%3) {
+    key_cnt = 0;
+    if(1) {
     	if(key_cnt%3 == 0) {
                 EPD_ShowNum(0, 44, time_hour, 2, 64, BLACK);
                 EPD_ShowPicture(64, 44, 24, 64, gImage_2464_colon, BLACK);
@@ -228,6 +230,11 @@ int main(void)
 	last_key_cnt = key_cnt%3;
         EPD_Display(ImageBW);
         EPD_PartUpdate();
+
+  	Log_Printf("enter sleep\n");
+  	EnterSleepMode();
+  	SystemClock_Config();
+  	Log_Printf("wakeup from sleep\n");
     }
 
     if(uart_data_ready) {
@@ -317,6 +324,7 @@ void SystemClock_Config(void)
 /* USER CODE BEGIN 4 */
 void EnterSleepMode(void)
 {
+  LL_PWR_ClearFlag_WU();
   /* Set Stop 0 mode when CPU enters deepsleep */
   LL_PWR_SetPowerMode(LL_PWR_MODE_STOP);
 

@@ -164,6 +164,7 @@ void I2C1_IRQHandler(void)
 	  i2c_slave_pack.raw_data_len = i2c_data_index;
 	  i2c_data_index = 0;
   }
+
   /* USER CODE END I2C1_IRQn 0 */
 
   /* USER CODE BEGIN I2C1_IRQn 1 */
@@ -180,6 +181,9 @@ void EXTI4_15_IRQHandler(void)
 	key_cnt++;
         LL_EXTI_ClearFlag_0_31(LL_EXTI_LINE_14);
     }
+
+    if (LL_EXTI_IsActiveFlag_0_31(LL_EXTI_LINE_9) != RESET)
+        LL_EXTI_ClearFlag_0_31(LL_EXTI_LINE_9);
 }
 
 /**
