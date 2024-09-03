@@ -148,20 +148,20 @@ int main(void)
   //EPD_ShowString(88 ,114,"28.9",24,BLACK);
   //EPD_ShowPicture(140, 114, 12, 24, gImage_1224_c, BLACK);
 
-  Log_Printf("lcd display pic ok\n");
-  uint32_t input_data = 0;
-  float float_time=12.11;
-  float float_num=28.9;
-  uint8_t dat = 0;
-  uint32_t time;
-  uint32_t number = 79;
-  uint8_t time_hour, time_min;
-  float temp;
-  int8_t humi;
+  //Log_Printf("lcd display pic ok\n");
+  //uint32_t input_data = 0;
+  //float float_time=12.11;
+  //float float_num=28.9;
+  //uint8_t dat = 0;
+  //uint32_t time;
+  //uint32_t number = 79;
+  //uint8_t time_hour, time_min;
+  //float temp;
+  //int8_t humi;
 
-  LL_GPIO_ResetOutputPin(GPIOB, LL_GPIO_PIN_1);
-  LL_mDelay(50);
-  LL_GPIO_SetOutputPin(GPIOB, LL_GPIO_PIN_1);
+  //LL_GPIO_ResetOutputPin(GPIOB, LL_GPIO_PIN_1);
+  //LL_mDelay(50);
+  //LL_GPIO_SetOutputPin(GPIOB, LL_GPIO_PIN_1);
   /* USER CODE BEGIN 2 */
   Log_Printf("enter sleep\n");
   EnterSleepMode();
@@ -178,84 +178,88 @@ int main(void)
     /* USER CODE BEGIN 3 */
     LL_mDelay(1000);
     Log_Printf("loop test %d\n", key_cnt);
-    if(i2c_slave_pack.raw_data_len) {
-            i2c_slave_pack.raw_data_len = 0;
-            Update_Lcd_Data(&i2c_slave_pack, &lcd_data_pack);
-            Log_Printf("temp:%d\n", (uint16_t)(lcd_data_pack.temp*10));
-            Log_Printf("humi:%d\n", lcd_data_pack.humi);
-            Log_Printf("smile:%d\n", lcd_data_pack.smile);
-            Log_Printf("ble:%d\n", lcd_data_pack.ble);
-            Log_Printf("format:%d\n", lcd_data_pack.temp_format);
-            Log_Printf("battery:%d\n", lcd_data_pack.battery);
-	    if(lcd_data_pack.ble)
-                EPD_ShowPicture(120, 14, 24, 24, gImage_2424_bt, BLACK);
-	    if(lcd_data_pack.smile == 1)
-		EPD_ShowPicture(44, 10, 64, 32, gImage_6432_smile_happy, BLACK);
-	    else if(lcd_data_pack.smile == 2)
-		EPD_ShowPicture(44, 10, 64, 32, gImage_6432_smile_sad, BLACK);
-	    temp = lcd_data_pack.temp;
-            humi = lcd_data_pack.humi;
-    }
+    Log_Printf("enter sleep\n");
+    EnterSleepMode();
+    SystemClock_Config();
+    Log_Printf("wakeup from sleep\n");
+    //if(i2c_slave_pack.raw_data_len) {
+    //        i2c_slave_pack.raw_data_len = 0;
+    //        Update_Lcd_Data(&i2c_slave_pack, &lcd_data_pack);
+    //        Log_Printf("temp:%d\n", (uint16_t)(lcd_data_pack.temp*10));
+    //        Log_Printf("humi:%d\n", lcd_data_pack.humi);
+    //        Log_Printf("smile:%d\n", lcd_data_pack.smile);
+    //        Log_Printf("ble:%d\n", lcd_data_pack.ble);
+    //        Log_Printf("format:%d\n", lcd_data_pack.temp_format);
+    //        Log_Printf("battery:%d\n", lcd_data_pack.battery);
+    //        if(lcd_data_pack.ble)
+    //            EPD_ShowPicture(120, 14, 24, 24, gImage_2424_bt, BLACK);
+    //        if(lcd_data_pack.smile == 1)
+    //    	EPD_ShowPicture(44, 10, 64, 32, gImage_6432_smile_happy, BLACK);
+    //        else if(lcd_data_pack.smile == 2)
+    //    	EPD_ShowPicture(44, 10, 64, 32, gImage_6432_smile_sad, BLACK);
+    //        temp = lcd_data_pack.temp;
+    //        humi = lcd_data_pack.humi;
+    //}
 
-    time_hour = __LL_RTC_CONVERT_BCD2BIN(LL_RTC_TIME_GetHour(RTC));
-    time_min  = __LL_RTC_CONVERT_BCD2BIN(LL_RTC_TIME_GetMinute(RTC));
-    //if(last_key_cnt != key_cnt%3) {
-    key_cnt = 0;
-    if(1) {
-    	if(key_cnt%3 == 0) {
-                EPD_ShowNum(0, 44, time_hour, 2, 64, BLACK);
-                EPD_ShowPicture(64, 44, 24, 64, gImage_2464_colon, BLACK);
-                EPD_ShowNum(88, 44, time_min, 2, 64, BLACK);
-                EPD_ShowFloatNum1(20, 114, temp, 3, 1, 24, BLACK);
-                EPD_ShowPicture(68, 114, 12, 24, gImage_1224_c, BLACK);
-                EPD_ShowNum(100 ,114, humi, 2, 24, BLACK);
-		EPD_ShowChar(124, 114, '%', 24, BLACK);
-    	} else if(key_cnt%3 == 1) {
-                EPD_ShowFloatNum1(0 ,44, temp, 3, 1, 64, BLACK);
-                EPD_ShowPicture(128, 44, 12, 24, gImage_1224_c, BLACK);
-                EPD_ShowNum(10, 114, time_hour, 2, 24, BLACK);
-		EPD_ShowChar(34, 114, ':', 24, BLACK);
-                EPD_ShowNum(46, 114, time_min, 2, 24, BLACK);
-                EPD_ShowNum(100, 114, humi, 2, 24, BLACK);
-		EPD_ShowChar(124, 114, '%', 24, BLACK);
-    	} else {
-                EPD_ShowNum(32, 44, humi, 2, 64, BLACK);
-		EPD_ShowChar(96, 44, '%', 64, BLACK);
-                EPD_ShowNum(10, 114, time_hour, 2, 24, BLACK);
-		EPD_ShowChar(34, 114, ':', 24, BLACK);
-                EPD_ShowNum(46, 114, time_min, 2, 24, BLACK);
-                EPD_ShowFloatNum1(88, 114, temp, 3, 1, 24, BLACK);
-                EPD_ShowPicture(140, 114, 12, 24, gImage_1224_c, BLACK);
-    	}
-	last_key_cnt = key_cnt%3;
-        EPD_Display(ImageBW);
-        EPD_PartUpdate();
+    //time_hour = __LL_RTC_CONVERT_BCD2BIN(LL_RTC_TIME_GetHour(RTC));
+    //time_min  = __LL_RTC_CONVERT_BCD2BIN(LL_RTC_TIME_GetMinute(RTC));
+    ////if(last_key_cnt != key_cnt%3) {
+    //key_cnt = 0;
+    //if(1) {
+    //	if(key_cnt%3 == 0) {
+    //            EPD_ShowNum(0, 44, time_hour, 2, 64, BLACK);
+    //            EPD_ShowPicture(64, 44, 24, 64, gImage_2464_colon, BLACK);
+    //            EPD_ShowNum(88, 44, time_min, 2, 64, BLACK);
+    //            EPD_ShowFloatNum1(20, 114, temp, 3, 1, 24, BLACK);
+    //            EPD_ShowPicture(68, 114, 12, 24, gImage_1224_c, BLACK);
+    //            EPD_ShowNum(100 ,114, humi, 2, 24, BLACK);
+    //    	EPD_ShowChar(124, 114, '%', 24, BLACK);
+    //	} else if(key_cnt%3 == 1) {
+    //            EPD_ShowFloatNum1(0 ,44, temp, 3, 1, 64, BLACK);
+    //            EPD_ShowPicture(128, 44, 12, 24, gImage_1224_c, BLACK);
+    //            EPD_ShowNum(10, 114, time_hour, 2, 24, BLACK);
+    //    	EPD_ShowChar(34, 114, ':', 24, BLACK);
+    //            EPD_ShowNum(46, 114, time_min, 2, 24, BLACK);
+    //            EPD_ShowNum(100, 114, humi, 2, 24, BLACK);
+    //    	EPD_ShowChar(124, 114, '%', 24, BLACK);
+    //	} else {
+    //            EPD_ShowNum(32, 44, humi, 2, 64, BLACK);
+    //    	EPD_ShowChar(96, 44, '%', 64, BLACK);
+    //            EPD_ShowNum(10, 114, time_hour, 2, 24, BLACK);
+    //    	EPD_ShowChar(34, 114, ':', 24, BLACK);
+    //            EPD_ShowNum(46, 114, time_min, 2, 24, BLACK);
+    //            EPD_ShowFloatNum1(88, 114, temp, 3, 1, 24, BLACK);
+    //            EPD_ShowPicture(140, 114, 12, 24, gImage_1224_c, BLACK);
+    //	}
+    //    last_key_cnt = key_cnt%3;
+    //    EPD_Display(ImageBW);
+    //    EPD_PartUpdate();
 
-  	Log_Printf("enter sleep\n");
-  	EnterSleepMode();
-  	SystemClock_Config();
-  	Log_Printf("wakeup from sleep\n");
-    }
+    //    Log_Printf("enter sleep\n");
+    //    EnterSleepMode();
+    //    SystemClock_Config();
+    //    Log_Printf("wakeup from sleep\n");
+    //}
 
-    if(uart_data_ready) {
-	    Log_Printf("u:%s\n", uart_data);
-	    RTC_TimeStruct.Hours =   (uart_data[8] - 0x30) * 0x10 + (uart_data[9] - 0x30);
-	    RTC_TimeStruct.Minutes = (uart_data[10] - 0x30) * 0x10 + (uart_data[11] - 0x30);
-	    RTC_TimeStruct.Seconds = (uart_data[12] - 0x30) * 0x10 + (uart_data[13] - 0x30);
-	    LL_RTC_TIME_Init(RTC, LL_RTC_FORMAT_BCD, &RTC_TimeStruct);
-	    RTC_DateStruct.Month = (uart_data[4] - 0x30) * 0x10 + (uart_data[5] - 0x30);
-	    RTC_DateStruct.Day = (uart_data[6] - 0x30) * 0x10 + (uart_data[7] - 0x30);
-  	    RTC_DateStruct.Year =(uart_data[2] - 0x30) * 0x10 + (uart_data[3] - 0x30) ;
-  	    LL_RTC_DATE_Init(RTC, LL_RTC_FORMAT_BCD, &RTC_DateStruct);
-	    uart_data_ready = 0;
-    }
+    //if(uart_data_ready) {
+    //        Log_Printf("u:%s\n", uart_data);
+    //        RTC_TimeStruct.Hours =   (uart_data[8] - 0x30) * 0x10 + (uart_data[9] - 0x30);
+    //        RTC_TimeStruct.Minutes = (uart_data[10] - 0x30) * 0x10 + (uart_data[11] - 0x30);
+    //        RTC_TimeStruct.Seconds = (uart_data[12] - 0x30) * 0x10 + (uart_data[13] - 0x30);
+    //        LL_RTC_TIME_Init(RTC, LL_RTC_FORMAT_BCD, &RTC_TimeStruct);
+    //        RTC_DateStruct.Month = (uart_data[4] - 0x30) * 0x10 + (uart_data[5] - 0x30);
+    //        RTC_DateStruct.Day = (uart_data[6] - 0x30) * 0x10 + (uart_data[7] - 0x30);
+    //        RTC_DateStruct.Year =(uart_data[2] - 0x30) * 0x10 + (uart_data[3] - 0x30) ;
+    //        LL_RTC_DATE_Init(RTC, LL_RTC_FORMAT_BCD, &RTC_DateStruct);
+    //        uart_data_ready = 0;
+    //}
 
-    Log_Printf("rtc year:%d\n", __LL_RTC_CONVERT_BCD2BIN(LL_RTC_DATE_GetYear(RTC)));
-    Log_Printf("rtc month:%d\n", __LL_RTC_CONVERT_BCD2BIN(LL_RTC_DATE_GetMonth(RTC)));
-    Log_Printf("rtc weekday:%d\n", __LL_RTC_CONVERT_BCD2BIN(LL_RTC_DATE_GetWeekDay(RTC)));
-    Log_Printf("rtc hour:%d\n", __LL_RTC_CONVERT_BCD2BIN(LL_RTC_TIME_GetHour(RTC)));
-    Log_Printf("rtc min:%d\n", __LL_RTC_CONVERT_BCD2BIN(LL_RTC_TIME_GetMinute(RTC)));
-    Log_Printf("rtc sec:%d\n", __LL_RTC_CONVERT_BCD2BIN(LL_RTC_TIME_GetSecond(RTC)));
+    //Log_Printf("rtc year:%d\n", __LL_RTC_CONVERT_BCD2BIN(LL_RTC_DATE_GetYear(RTC)));
+    //Log_Printf("rtc month:%d\n", __LL_RTC_CONVERT_BCD2BIN(LL_RTC_DATE_GetMonth(RTC)));
+    //Log_Printf("rtc weekday:%d\n", __LL_RTC_CONVERT_BCD2BIN(LL_RTC_DATE_GetWeekDay(RTC)));
+    //Log_Printf("rtc hour:%d\n", __LL_RTC_CONVERT_BCD2BIN(LL_RTC_TIME_GetHour(RTC)));
+    //Log_Printf("rtc min:%d\n", __LL_RTC_CONVERT_BCD2BIN(LL_RTC_TIME_GetMinute(RTC)));
+    //Log_Printf("rtc sec:%d\n", __LL_RTC_CONVERT_BCD2BIN(LL_RTC_TIME_GetSecond(RTC)));
   }
   /* USER CODE END 3 */
 }
