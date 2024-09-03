@@ -36,6 +36,8 @@ void MX_I2C1_Init(void)
 
   LL_GPIO_InitTypeDef GPIO_InitStruct = {0};
 
+  uint32_t timing = 0;
+
   LL_IOP_GRP1_EnableClock(LL_IOP_GRP1_PERIPH_GPIOA);
   /**I2C1 GPIO Configuration
   PA9   ------> I2C1_SCL
@@ -60,30 +62,30 @@ void MX_I2C1_Init(void)
   /* Peripheral clock enable */
   LL_APB1_GRP1_EnableClock(LL_APB1_GRP1_PERIPH_I2C1);
 
+  /* According to TRM, I2C clock must be HSI if it can wakeup STOP mode */
+  LL_RCC_SetI2CClockSource(LL_RCC_I2C1_CLKSOURCE_HSI);
+
   /* I2C1 interrupt Init */
   NVIC_SetPriority(I2C1_IRQn, 0);
   NVIC_EnableIRQ(I2C1_IRQn);
 
   /* USER CODE BEGIN I2C1_Init 1 */
 
-  /* USER CODE END I2C1_Init 1 */
-  /** I2C Initialization
-  */
-  LL_I2C_EnableAutoEndMode(I2C1);
-  LL_I2C_DisableOwnAddress2(I2C1);
-  LL_I2C_EnableGeneralCall(I2C1);
-  LL_I2C_DisableClockStretching(I2C1);
-  I2C_InitStruct.PeripheralMode = LL_I2C_MODE_I2C;
-  I2C_InitStruct.Timing = 0x00506682;
-  I2C_InitStruct.AnalogFilter = LL_I2C_ANALOGFILTER_ENABLE;
-  I2C_InitStruct.DigitalFilter = 0;
-  I2C_InitStruct.OwnAddress1 = (0x3c << 1);
-  I2C_InitStruct.TypeAcknowledge = LL_I2C_ACK;
-  I2C_InitStruct.OwnAddrSize = LL_I2C_OWNADDRESS1_7BIT;
-  LL_I2C_Init(I2C1, &I2C_InitStruct);
-  LL_I2C_SetOwnAddress2(I2C1, 0, LL_I2C_OWNADDRESS2_NOMASK);
-  /* USER CODE BEGIN I2C1_Init 2 */
+  LL_I2C_Disable(I2C1);
 
+  timing = __LL_I2C_CONVERT_TIMINGS(0x0, 0x3, 0x0, 0x3d, 0x5b); 
+  LL_I2C_SetTiming(I2C1, timing);
+
+  LL_I2C_SetOwnAddress1(I2C1, (0x3c << 1), LL_I2C_OWNADDRESS1_7BIT);
+  LL_I2C_EnableOwnAddress1(I2C1);
+
+  LL_I2C_EnableWakeUpFromStop(I2C1);
+
+  LL_I2C_Enable(I2C1);
+
+  /* Only ADDR match irq can wakeup STOP */
+  LL_I2C_EnableIT_ADDR(I2C1);
+  LL_I2C_EnableIT_ADDR(I2C1);
   LL_I2C_EnableIT_RX(I2C1);
   LL_I2C_EnableIT_STOP(I2C1);
   /* USER CODE END I2C1_Init 2 */

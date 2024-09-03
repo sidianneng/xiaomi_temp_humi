@@ -165,6 +165,9 @@ void I2C1_IRQHandler(void)
 	  i2c_data_index = 0;
   }
 
+  if(LL_I2C_IsActiveFlag_ADDR(I2C1)) 
+	  LL_I2C_ClearFlag_ADDR(I2C1);
+
   /* USER CODE END I2C1_IRQn 0 */
 
   /* USER CODE BEGIN I2C1_IRQn 1 */

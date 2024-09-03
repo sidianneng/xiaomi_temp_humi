@@ -156,8 +156,8 @@ int main(void)
   //uint32_t time;
   //uint32_t number = 79;
   //uint8_t time_hour, time_min;
-  //float temp;
-  //int8_t humi;
+  float temp;
+  int8_t humi;
 
   //LL_GPIO_ResetOutputPin(GPIOB, LL_GPIO_PIN_1);
   //LL_mDelay(50);
@@ -182,24 +182,27 @@ int main(void)
     EnterSleepMode();
     SystemClock_Config();
     Log_Printf("wakeup from sleep\n");
-    //if(i2c_slave_pack.raw_data_len) {
-    //        i2c_slave_pack.raw_data_len = 0;
-    //        Update_Lcd_Data(&i2c_slave_pack, &lcd_data_pack);
-    //        Log_Printf("temp:%d\n", (uint16_t)(lcd_data_pack.temp*10));
-    //        Log_Printf("humi:%d\n", lcd_data_pack.humi);
-    //        Log_Printf("smile:%d\n", lcd_data_pack.smile);
-    //        Log_Printf("ble:%d\n", lcd_data_pack.ble);
-    //        Log_Printf("format:%d\n", lcd_data_pack.temp_format);
-    //        Log_Printf("battery:%d\n", lcd_data_pack.battery);
-    //        if(lcd_data_pack.ble)
-    //            EPD_ShowPicture(120, 14, 24, 24, gImage_2424_bt, BLACK);
-    //        if(lcd_data_pack.smile == 1)
-    //    	EPD_ShowPicture(44, 10, 64, 32, gImage_6432_smile_happy, BLACK);
-    //        else if(lcd_data_pack.smile == 2)
-    //    	EPD_ShowPicture(44, 10, 64, 32, gImage_6432_smile_sad, BLACK);
-    //        temp = lcd_data_pack.temp;
-    //        humi = lcd_data_pack.humi;
-    //}
+    if(i2c_slave_pack.raw_data_len) {
+	    for(uint8_t i = 0;i < i2c_slave_pack.raw_data_len; i++)
+		    Log_Printf("0x%x ", i2c_slave_pack.raw_data[i]);
+	    Log_Printf("\n");
+            i2c_slave_pack.raw_data_len = 0;
+            Update_Lcd_Data(&i2c_slave_pack, &lcd_data_pack);
+            Log_Printf("temp:%d\n", (uint16_t)(lcd_data_pack.temp*10));
+            Log_Printf("humi:%d\n", lcd_data_pack.humi);
+            Log_Printf("smile:%d\n", lcd_data_pack.smile);
+            Log_Printf("ble:%d\n", lcd_data_pack.ble);
+            Log_Printf("format:%d\n", lcd_data_pack.temp_format);
+            Log_Printf("battery:%d\n", lcd_data_pack.battery);
+            if(lcd_data_pack.ble)
+                EPD_ShowPicture(120, 14, 24, 24, gImage_2424_bt, BLACK);
+            if(lcd_data_pack.smile == 1)
+        	EPD_ShowPicture(44, 10, 64, 32, gImage_6432_smile_happy, BLACK);
+            else if(lcd_data_pack.smile == 2)
+        	EPD_ShowPicture(44, 10, 64, 32, gImage_6432_smile_sad, BLACK);
+            temp = lcd_data_pack.temp;
+            humi = lcd_data_pack.humi;
+    }
 
     //time_hour = __LL_RTC_CONVERT_BCD2BIN(LL_RTC_TIME_GetHour(RTC));
     //time_min  = __LL_RTC_CONVERT_BCD2BIN(LL_RTC_TIME_GetMinute(RTC));
@@ -322,7 +325,7 @@ void SystemClock_Config(void)
 
   LL_SetSystemCoreClock(24000000);
   LL_RCC_SetUSARTClockSource(LL_RCC_USART2_CLKSOURCE_PCLK1);
-  LL_RCC_SetI2CClockSource(LL_RCC_I2C1_CLKSOURCE_PCLK1);
+  LL_RCC_SetI2CClockSource(LL_RCC_I2C1_CLKSOURCE_HSI);
 }
 
 /* USER CODE BEGIN 4 */
