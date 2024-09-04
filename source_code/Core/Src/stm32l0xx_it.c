@@ -165,8 +165,14 @@ void I2C1_IRQHandler(void)
 	  i2c_data_index = 0;
   }
 
-  if(LL_I2C_IsActiveFlag_ADDR(I2C1)) 
-	  LL_I2C_ClearFlag_ADDR(I2C1);
+  if(LL_I2C_IsActiveFlag_ADDR(I2C1)) {
+          LL_I2C_ClearFlag_ADDR(I2C1);
+          LL_I2C_EnableIT_TX(I2C1);
+  }
+
+  //transmit a byte to master if they send a read command
+  if(LL_I2C_IsActiveFlag_TXIS(I2C1))
+        LL_I2C_TransmitData8(I2C1, 0x00);
 
   /* USER CODE END I2C1_IRQn 0 */
 
