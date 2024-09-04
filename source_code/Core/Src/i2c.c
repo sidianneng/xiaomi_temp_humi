@@ -85,7 +85,6 @@ void MX_I2C1_Init(void)
 
   /* Only ADDR match irq can wakeup STOP */
   LL_I2C_EnableIT_ADDR(I2C1);
-  LL_I2C_EnableIT_ADDR(I2C1);
   LL_I2C_EnableIT_RX(I2C1);
   LL_I2C_EnableIT_STOP(I2C1);
   /* USER CODE END I2C1_Init 2 */
