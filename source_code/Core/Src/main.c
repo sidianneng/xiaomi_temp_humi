@@ -158,11 +158,13 @@ int main(void)
   //uint8_t time_hour, time_min;
   float temp;
   int8_t humi;
+  uint32_t rev_id = 0;
 
   //LL_GPIO_ResetOutputPin(GPIOB, LL_GPIO_PIN_1);
   //LL_mDelay(50);
   //LL_GPIO_SetOutputPin(GPIOB, LL_GPIO_PIN_1);
   /* USER CODE BEGIN 2 */
+  Log_Printf("rev:0x%x\n", LL_DBGMCU_GetRevisionID());
   Log_Printf("enter sleep\n");
   EnterSleepMode();
   SystemClock_Config();
