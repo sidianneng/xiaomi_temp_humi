@@ -73,13 +73,18 @@ void MX_I2C1_Init(void)
 
   LL_I2C_Disable(I2C1);
 
+  LL_I2C_EnableAutoEndMode(I2C1);
+  LL_I2C_DisableOwnAddress2(I2C1);
+  LL_I2C_EnableGeneralCall(I2C1);
+  LL_I2C_DisableClockStretching(I2C1);
+
   timing = __LL_I2C_CONVERT_TIMINGS(0x0, 0x3, 0x0, 0x3d, 0x5b); 
   LL_I2C_SetTiming(I2C1, timing);
 
   LL_I2C_SetOwnAddress1(I2C1, (0x3c << 1), LL_I2C_OWNADDRESS1_7BIT);
   LL_I2C_EnableOwnAddress1(I2C1);
 
-  LL_I2C_EnableWakeUpFromStop(I2C1);
+  //LL_I2C_EnableWakeUpFromStop(I2C1);
 
   LL_I2C_Enable(I2C1);
 
