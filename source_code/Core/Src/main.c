@@ -101,7 +101,7 @@ int main(void)
   SystemClock_Config();
 
   /* USER CODE BEGIN SysInit */
-
+  LL_RCC_SetClkAfterWakeFromStop(LL_RCC_STOP_WAKEUPCLOCK_HSI);
   /* USER CODE END SysInit */
 
   /* Initialize all configured peripherals */
@@ -165,10 +165,6 @@ int main(void)
   //LL_GPIO_SetOutputPin(GPIOB, LL_GPIO_PIN_1);
   /* USER CODE BEGIN 2 */
   Log_Printf("rev:0x%x\n", LL_DBGMCU_GetRevisionID());
-  Log_Printf("enter sleep\n");
-  EnterSleepMode();
-  SystemClock_Config();
-  Log_Printf("wakeup from sleep\n");
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -181,8 +177,9 @@ int main(void)
     LL_mDelay(1000);
     Log_Printf("loop test %d\n", key_cnt);
     Log_Printf("enter sleep\n");
+    PrepareUSARTToStopMode();
     EnterSleepMode();
-    SystemClock_Config();
+    //SystemClock_Config();
     Log_Printf("wakeup from sleep\n");
     if(i2c_slave_pack.raw_data_len) {
 	    for(uint8_t i = 0;i < i2c_slave_pack.raw_data_len; i++)
@@ -246,8 +243,8 @@ int main(void)
     //    Log_Printf("wakeup from sleep\n");
     //}
 
-    //if(uart_data_ready) {
-    //        Log_Printf("u:%s\n", uart_data);
+    if(uart_data_ready) {
+            Log_Printf("u:%s\n", uart_data);
     //        RTC_TimeStruct.Hours =   (uart_data[8] - 0x30) * 0x10 + (uart_data[9] - 0x30);
     //        RTC_TimeStruct.Minutes = (uart_data[10] - 0x30) * 0x10 + (uart_data[11] - 0x30);
     //        RTC_TimeStruct.Seconds = (uart_data[12] - 0x30) * 0x10 + (uart_data[13] - 0x30);
@@ -256,8 +253,8 @@ int main(void)
     //        RTC_DateStruct.Day = (uart_data[6] - 0x30) * 0x10 + (uart_data[7] - 0x30);
     //        RTC_DateStruct.Year =(uart_data[2] - 0x30) * 0x10 + (uart_data[3] - 0x30) ;
     //        LL_RTC_DATE_Init(RTC, LL_RTC_FORMAT_BCD, &RTC_DateStruct);
-    //        uart_data_ready = 0;
-    //}
+            uart_data_ready = 0;
+    }
 
     //Log_Printf("rtc year:%d\n", __LL_RTC_CONVERT_BCD2BIN(LL_RTC_DATE_GetYear(RTC)));
     //Log_Printf("rtc month:%d\n", __LL_RTC_CONVERT_BCD2BIN(LL_RTC_DATE_GetMonth(RTC)));
@@ -326,6 +323,7 @@ void SystemClock_Config(void)
 void EnterSleepMode(void)
 {
   LL_PWR_ClearFlag_WU();
+  LL_PWR_SetRegulModeLP(LL_PWR_REGU_LPMODES_LOW_POWER);
   /* Set Stop 0 mode when CPU enters deepsleep */
   LL_PWR_SetPowerMode(LL_PWR_MODE_STOP);
 

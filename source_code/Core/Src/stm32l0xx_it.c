@@ -207,13 +207,19 @@ void USART2_IRQHandler(void)
 {
   /* USER CODE BEGIN USART2_IRQn 0 */
   if(LL_USART_IsActiveFlag_RXNE(USART2)) {
-	  //Log_Printf("0x%x\n", LL_USART_ReceiveData8(USART2));
-	  temp = LL_USART_ReceiveData8(USART2);
-	  uart_data[uart_index++] = temp;
-	  if(temp == 0x0d) {
-		  uart_data_ready = 1;
-		  uart_index = 0;
-	  }
+          temp = LL_USART_ReceiveData8(USART2);
+          uart_data[uart_index++] = temp;
+          if(temp == 0x0d) {
+        	  uart_data_ready = 1;
+        	  uart_index = 0;
+          }
+  }
+  if(LL_USART_IsActiveFlag_WKUP(USART2) && LL_USART_IsEnabledIT_WKUP(USART2)) {
+	  /* Disable the UART Wake UP from stop mode Interrupt */
+          LL_USART_DisableIT_WKUP(USART2);
+
+	  /* WUF flag clearing */
+          LL_USART_ClearFlag_WKUP(USART2);
   }
   /* USER CODE END USART2_IRQn 0 */
   /* USER CODE BEGIN USART2_IRQn 1 */
