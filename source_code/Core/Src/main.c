@@ -148,17 +148,17 @@ int main(void)
   //EPD_ShowString(88 ,114,"28.9",24,BLACK);
   //EPD_ShowPicture(140, 114, 12, 24, gImage_1224_c, BLACK);
 
-  //Log_Printf("lcd display pic ok\n");
-  //uint32_t input_data = 0;
-  //float float_time=12.11;
-  //float float_num=28.9;
-  //uint8_t dat = 0;
-  //uint32_t time;
-  //uint32_t number = 79;
-  //uint8_t time_hour, time_min;
+  uint8_t time_hour, time_min;
+  uint8_t last_time_hour, last_time_min;
   float temp;
+  float last_temp;
   int8_t humi;
+  int8_t last_humi;
   uint32_t rev_id = 0;
+  //bit0:i2c receive data
+  //bit1:rtc time change 
+  //bit2:key input
+  uint8_t lcd_update_flag = 0x00;
 
   //LL_GPIO_ResetOutputPin(GPIOB, LL_GPIO_PIN_1);
   //LL_mDelay(50);
@@ -174,13 +174,12 @@ int main(void)
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
-    LL_mDelay(1000);
-    Log_Printf("loop test %d\n", key_cnt);
-    Log_Printf("enter sleep\n");
+    //LL_mDelay(1000);
+    //Log_Printf("loop test %d\n", key_cnt);
+    //Log_Printf("enter sleep\n");
     PrepareUSARTToStopMode();
     EnterSleepMode();
-    //SystemClock_Config();
-    Log_Printf("wakeup from sleep\n");
+    //Log_Printf("wakeup from sleep\n");
     if(i2c_slave_pack.raw_data_len) {
 	    for(uint8_t i = 0;i < i2c_slave_pack.raw_data_len; i++)
 		    Log_Printf("0x%x ", i2c_slave_pack.raw_data[i]);
@@ -201,60 +200,65 @@ int main(void)
         	EPD_ShowPicture(44, 10, 64, 32, gImage_6432_smile_sad, BLACK);
             temp = lcd_data_pack.temp;
             humi = lcd_data_pack.humi;
+	    lcd_update_flag |= (0x01 << 0);
     }
 
-    //time_hour = __LL_RTC_CONVERT_BCD2BIN(LL_RTC_TIME_GetHour(RTC));
-    //time_min  = __LL_RTC_CONVERT_BCD2BIN(LL_RTC_TIME_GetMinute(RTC));
-    ////if(last_key_cnt != key_cnt%3) {
-    //key_cnt = 0;
-    //if(1) {
-    //	if(key_cnt%3 == 0) {
-    //            EPD_ShowNum(0, 44, time_hour, 2, 64, BLACK);
-    //            EPD_ShowPicture(64, 44, 24, 64, gImage_2464_colon, BLACK);
-    //            EPD_ShowNum(88, 44, time_min, 2, 64, BLACK);
-    //            EPD_ShowFloatNum1(20, 114, temp, 3, 1, 24, BLACK);
-    //            EPD_ShowPicture(68, 114, 12, 24, gImage_1224_c, BLACK);
-    //            EPD_ShowNum(100 ,114, humi, 2, 24, BLACK);
-    //    	EPD_ShowChar(124, 114, '%', 24, BLACK);
-    //	} else if(key_cnt%3 == 1) {
-    //            EPD_ShowFloatNum1(0 ,44, temp, 3, 1, 64, BLACK);
-    //            EPD_ShowPicture(128, 44, 12, 24, gImage_1224_c, BLACK);
-    //            EPD_ShowNum(10, 114, time_hour, 2, 24, BLACK);
-    //    	EPD_ShowChar(34, 114, ':', 24, BLACK);
-    //            EPD_ShowNum(46, 114, time_min, 2, 24, BLACK);
-    //            EPD_ShowNum(100, 114, humi, 2, 24, BLACK);
-    //    	EPD_ShowChar(124, 114, '%', 24, BLACK);
-    //	} else {
-    //            EPD_ShowNum(32, 44, humi, 2, 64, BLACK);
-    //    	EPD_ShowChar(96, 44, '%', 64, BLACK);
-    //            EPD_ShowNum(10, 114, time_hour, 2, 24, BLACK);
-    //    	EPD_ShowChar(34, 114, ':', 24, BLACK);
-    //            EPD_ShowNum(46, 114, time_min, 2, 24, BLACK);
-    //            EPD_ShowFloatNum1(88, 114, temp, 3, 1, 24, BLACK);
-    //            EPD_ShowPicture(140, 114, 12, 24, gImage_1224_c, BLACK);
-    //	}
-    //    last_key_cnt = key_cnt%3;
-    //    EPD_Display(ImageBW);
-    //    EPD_PartUpdate();
+    time_hour = __LL_RTC_CONVERT_BCD2BIN(LL_RTC_TIME_GetHour(RTC));
+    time_min  = __LL_RTC_CONVERT_BCD2BIN(LL_RTC_TIME_GetMinute(RTC));
+    if(time_hour != last_time_hour || time_min != last_time_min)
+	    lcd_update_flag |= (0x01 << 1);
+    last_time_hour = time_hour;
+    last_time_min  = time_min;
 
-    //    Log_Printf("enter sleep\n");
-    //    EnterSleepMode();
-    //    SystemClock_Config();
-    //    Log_Printf("wakeup from sleep\n");
-    //}
+    if(last_key_cnt != key_cnt%3) {
+    	if(key_cnt%3 == 0) {
+                EPD_ShowNum(0, 44, time_hour, 2, 64, BLACK);
+                EPD_ShowPicture(64, 44, 24, 64, gImage_2464_colon, BLACK);
+                EPD_ShowNum(88, 44, time_min, 2, 64, BLACK);
+                EPD_ShowFloatNum1(20, 114, temp, 3, 1, 24, BLACK);
+                EPD_ShowPicture(68, 114, 12, 24, gImage_1224_c, BLACK);
+                EPD_ShowNum(100 ,114, humi, 2, 24, BLACK);
+        	EPD_ShowChar(124, 114, '%', 24, BLACK);
+    	} else if(key_cnt%3 == 1) {
+                EPD_ShowFloatNum1(0 ,44, temp, 3, 1, 64, BLACK);
+                EPD_ShowPicture(128, 44, 12, 24, gImage_1224_c, BLACK);
+                EPD_ShowNum(10, 114, time_hour, 2, 24, BLACK);
+        	EPD_ShowChar(34, 114, ':', 24, BLACK);
+                EPD_ShowNum(46, 114, time_min, 2, 24, BLACK);
+                EPD_ShowNum(100, 114, humi, 2, 24, BLACK);
+        	EPD_ShowChar(124, 114, '%', 24, BLACK);
+    	} else {
+                EPD_ShowNum(32, 44, humi, 2, 64, BLACK);
+        	EPD_ShowChar(96, 44, '%', 64, BLACK);
+                EPD_ShowNum(10, 114, time_hour, 2, 24, BLACK);
+        	EPD_ShowChar(34, 114, ':', 24, BLACK);
+                EPD_ShowNum(46, 114, time_min, 2, 24, BLACK);
+                EPD_ShowFloatNum1(88, 114, temp, 3, 1, 24, BLACK);
+                EPD_ShowPicture(140, 114, 12, 24, gImage_1224_c, BLACK);
+    	}
+        last_key_cnt = key_cnt%3;
+	lcd_update_flag |= (0x01 << 2);
+    }
 
     if(uart_data_ready) {
             Log_Printf("u:%s\n", uart_data);
-    //        RTC_TimeStruct.Hours =   (uart_data[8] - 0x30) * 0x10 + (uart_data[9] - 0x30);
-    //        RTC_TimeStruct.Minutes = (uart_data[10] - 0x30) * 0x10 + (uart_data[11] - 0x30);
-    //        RTC_TimeStruct.Seconds = (uart_data[12] - 0x30) * 0x10 + (uart_data[13] - 0x30);
-    //        LL_RTC_TIME_Init(RTC, LL_RTC_FORMAT_BCD, &RTC_TimeStruct);
-    //        RTC_DateStruct.Month = (uart_data[4] - 0x30) * 0x10 + (uart_data[5] - 0x30);
-    //        RTC_DateStruct.Day = (uart_data[6] - 0x30) * 0x10 + (uart_data[7] - 0x30);
-    //        RTC_DateStruct.Year =(uart_data[2] - 0x30) * 0x10 + (uart_data[3] - 0x30) ;
-    //        LL_RTC_DATE_Init(RTC, LL_RTC_FORMAT_BCD, &RTC_DateStruct);
+            RTC_TimeStruct.Hours =   (uart_data[8] - 0x30) * 0x10 + (uart_data[9] - 0x30);
+            RTC_TimeStruct.Minutes = (uart_data[10] - 0x30) * 0x10 + (uart_data[11] - 0x30);
+            RTC_TimeStruct.Seconds = (uart_data[12] - 0x30) * 0x10 + (uart_data[13] - 0x30);
+            LL_RTC_TIME_Init(RTC, LL_RTC_FORMAT_BCD, &RTC_TimeStruct);
+            RTC_DateStruct.Month = (uart_data[4] - 0x30) * 0x10 + (uart_data[5] - 0x30);
+            RTC_DateStruct.Day = (uart_data[6] - 0x30) * 0x10 + (uart_data[7] - 0x30);
+            RTC_DateStruct.Year =(uart_data[2] - 0x30) * 0x10 + (uart_data[3] - 0x30) ;
+            LL_RTC_DATE_Init(RTC, LL_RTC_FORMAT_BCD, &RTC_DateStruct);
             uart_data_ready = 0;
     }
+
+    if(lcd_update_flag) {
+        EPD_Display(ImageBW);
+        EPD_PartUpdate();
+    }
+
+    lcd_update_flag = 0x00;
 
     //Log_Printf("rtc year:%d\n", __LL_RTC_CONVERT_BCD2BIN(LL_RTC_DATE_GetYear(RTC)));
     //Log_Printf("rtc month:%d\n", __LL_RTC_CONVERT_BCD2BIN(LL_RTC_DATE_GetMonth(RTC)));
