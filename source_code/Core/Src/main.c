@@ -175,7 +175,7 @@ int main(void)
 
     /* USER CODE BEGIN 3 */
     //LL_mDelay(1000);
-    //Log_Printf("loop test %d\n", key_cnt);
+    Log_Printf("loop test %d\n", key_cnt);
     //Log_Printf("enter sleep\n");
     LL_EXTI_EnableIT_0_31(LL_EXTI_LINE_14);
     LL_EXTI_EnableIT_0_31(LL_EXTI_LINE_9);
