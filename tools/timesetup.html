@@ -15,7 +15,7 @@ async function connect() {
       serialport = await navigator.serial.requestPort();
       
       // Optionally, open the port with specific settings
-      await serialport.open({ baudRate: 115200 });
+      await serialport.open({ baudRate: 9600 });
 		
 	  console.log(`Connected to serialport with Vendor ID: ${serialport.getInfo().usbVendorId}, Product ID: ${serialport.getInfo().usbProductId}`);
       
