@@ -210,6 +210,7 @@ int main(void)
     last_time_min  = time_min;
 
     if(last_key_cnt != key_cnt%3 || (lcd_update_flag & 0x01)) {
+	memset(ImageBW, 0xff, 152 * 152 / 8 - 152 * 5);
     	if(key_cnt%3 == 0) {
                 EPD_ShowNum(0, 44, time_hour, 2, 64, BLACK);
                 EPD_ShowPicture(64, 44, 24, 64, gImage_2464_colon, BLACK);
