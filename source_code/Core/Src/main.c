@@ -177,6 +177,8 @@ int main(void)
     //LL_mDelay(1000);
     //Log_Printf("loop test %d\n", key_cnt);
     //Log_Printf("enter sleep\n");
+    LL_EXTI_EnableIT_0_31(LL_EXTI_LINE_14);
+    LL_EXTI_EnableIT_0_31(LL_EXTI_LINE_9);
     PrepareUSARTToStopMode();
     EnterSleepMode();
     //Log_Printf("wakeup from sleep\n");
@@ -207,7 +209,7 @@ int main(void)
     last_time_hour = time_hour;
     last_time_min  = time_min;
 
-    if(last_key_cnt != key_cnt%3) {
+    if(last_key_cnt != key_cnt%3 || (lcd_update_flag & 0x01)) {
     	if(key_cnt%3 == 0) {
                 EPD_ShowNum(0, 44, time_hour, 2, 64, BLACK);
                 EPD_ShowPicture(64, 44, 24, 64, gImage_2464_colon, BLACK);
@@ -233,9 +235,9 @@ int main(void)
                 EPD_ShowFloatNum1(88, 114, temp, 3, 1, 24, BLACK);
                 EPD_ShowPicture(140, 114, 12, 24, gImage_1224_c, BLACK);
     	}
-        last_key_cnt = key_cnt%3;
 	lcd_update_flag |= (0x01 << 2);
     }
+    last_key_cnt = key_cnt%3;
 
     if(uart_data_ready) {
             Log_Printf("u:%s\n", uart_data);

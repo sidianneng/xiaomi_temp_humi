@@ -189,10 +189,14 @@ void EXTI4_15_IRQHandler(void)
     {
 	key_cnt++;
         LL_EXTI_ClearFlag_0_31(LL_EXTI_LINE_14);
+	LL_EXTI_DisableIT_0_31(LL_EXTI_LINE_14);
     }
 
     if (LL_EXTI_IsActiveFlag_0_31(LL_EXTI_LINE_9) != RESET)
+    {
         LL_EXTI_ClearFlag_0_31(LL_EXTI_LINE_9);
+	LL_EXTI_DisableIT_0_31(LL_EXTI_LINE_9);
+    }
 }
 
 /**
