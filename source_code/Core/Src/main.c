@@ -158,7 +158,7 @@ int main(void)
   //bit0:i2c receive data
   //bit1:rtc time change 
   //bit2:key input
-  uint8_t lcd_update_flag = 0x00;
+  uint8_t lcd_update_flag = 0x80;
 
   //LL_GPIO_ResetOutputPin(GPIOB, LL_GPIO_PIN_1);
   //LL_mDelay(50);
