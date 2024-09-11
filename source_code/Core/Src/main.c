@@ -193,6 +193,8 @@ int main(void)
             Log_Printf("battery:%d\n", lcd_data_pack.battery);
             if(lcd_data_pack.ble)
                 EPD_ShowPicture(120, 14, 24, 24, gImage_2424_bt, BLACK);
+	    else
+                EPD_ShowPicture(120, 14, 24, 24, gImage_2424_nobt, BLACK);
             if(lcd_data_pack.smile == 1)
         	EPD_ShowPicture(44, 10, 64, 32, gImage_6432_smile_happy, BLACK);
             else if(lcd_data_pack.smile == 2)
