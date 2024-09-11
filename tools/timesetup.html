@@ -31,7 +31,7 @@ async function connect() {
   }
 }
 
-function gettime() {
+async function settime() {
   // Get the current date and time
   const now = new Date();
 
@@ -49,9 +49,6 @@ function gettime() {
   // Print the formatted time to the log
   const logElement = document.getElementById("log");
   logElement.innerHTML += `Current Time (All Digits): ${allDigitTime}<br>`;
-}
-
-async function settime() {
 
   if (!serialport) {
     alert("Please connect to a serial port first.");
@@ -86,7 +83,6 @@ async function settime() {
 </script>
 <big><big>Time Setup</big></big><br>
   <button type="button" onclick="connect();">Connect</button>
-  <button type="button" onclick="gettime();">GetTime</button>
   <button type="button" onclick="settime();">SetTime</button><br><br>
   <div id="log">Log:<br></div>
   <div id="result"></div>
