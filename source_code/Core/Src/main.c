@@ -111,6 +111,7 @@ int main(void)
   MX_RTC_Init();
   Log_Init();
   Log_Printf("xiaomi temp humi start\n");
+  Log_Printf("version: %d.%d\n", MAIN_VERSION, SUB_VERSION);
   Paint_NewImage(ImageBW,EPD_W,EPD_H,0,WHITE);
   Paint_Clear(WHITE);
   Log_Printf("lcd init ok\n");
