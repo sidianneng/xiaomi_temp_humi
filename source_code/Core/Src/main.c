@@ -170,6 +170,10 @@ int main(void)
         	EPD_ShowPicture(44, 10, 64, 32, gImage_6432_smile_happy, BLACK);
             else if(lcd_data_pack.smile == 2)
         	EPD_ShowPicture(44, 10, 64, 32, gImage_6432_smile_sad, BLACK);
+	    if(lcd_data_pack.battery)
+		EPD_ShowPicture(10, 14, 24, 24, gImage_2424_bat, BLACK);
+	    else
+		EPD_ShowPicture(10, 14, 24, 24, gImage_2424_nobat, BLACK);
             temp = lcd_data_pack.temp;
             humi = lcd_data_pack.humi;
 	    lcd_update_flag |= (0x01 << 0);
