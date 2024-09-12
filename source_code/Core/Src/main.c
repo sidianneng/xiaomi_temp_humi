@@ -119,35 +119,6 @@ int main(void)
   EPD_FastUpdate();
   EPD_Clear_R26H();
  
-  //main page one
-  //EPD_ShowPicture(10, 14, 24, 24, gImage_2424_bat, BLACK);
-  //EPD_ShowPicture(44, 10, 64, 32, gImage_6432_smile_happy, BLACK);
-  //EPD_ShowPicture(120, 14, 24, 24, gImage_2424_bt, BLACK);
-  //EPD_ShowString(0,44,"12",64,BLACK);
-  //EPD_ShowPicture(64, 44, 24, 64, gImage_2464_colon, BLACK);
-  //EPD_ShowString(88 ,44,"33",64,BLACK);
-  //EPD_ShowString(20 ,114,"28.9",24,BLACK);
-  //EPD_ShowPicture(68, 114, 12, 24, gImage_1224_c, BLACK);
-  //EPD_ShowString(100 ,114,"78%",24,BLACK);
-
-  //main page two
-  //EPD_ShowPicture(10, 14, 24, 24, gImage_2424_bat, BLACK);
-  //EPD_ShowPicture(44, 10, 64, 32, gImage_6432_smile_happy, BLACK);
-  //EPD_ShowPicture(120, 14, 24, 24, gImage_2424_bt, BLACK);
-  //EPD_ShowString(0 ,44,"28.9", 64,BLACK);
-  //EPD_ShowPicture(128, 44, 12, 24, gImage_1224_c, BLACK);
-  //EPD_ShowString(10,114,"12:33",24,BLACK);
-  //EPD_ShowString(100 ,114,"78%",24,BLACK);
-
-  //main page three
-  //EPD_ShowPicture(10, 14, 24, 24, gImage_2424_bat, BLACK);
-  //EPD_ShowPicture(44, 10, 64, 32, gImage_6432_smile_happy, BLACK);
-  //EPD_ShowPicture(120, 14, 24, 24, gImage_2424_bt, BLACK);
-  //EPD_ShowString(32 ,44,"78%",64,BLACK);
-  //EPD_ShowString(10,114,"12:33",24,BLACK);
-  //EPD_ShowString(88 ,114,"28.9",24,BLACK);
-  //EPD_ShowPicture(140, 114, 12, 24, gImage_1224_c, BLACK);
-
   uint8_t time_hour, time_min;
   uint8_t last_time_hour, last_time_min;
   float temp;
