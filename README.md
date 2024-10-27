@@ -21,6 +21,6 @@
 * 3d-model:结构件3D打印使用的STL文件
 * hardware:原理图，PCB位号图，PCB生产使用的gerber文件，以及物料列表和系统框图(查看工具https://app.diagrams.net/)
 * image:工程使用的各种图片文件
-* source_code:STM32L031的固件源文件，另外在工厂的release中存放了最新发布的固件
+* source_code:STM32L031的固件源文件，另外在工程的release中存放了最新发布的固件
 * tools:用来进行时间同步的html源码，通过浏览器打开即可使用
 
